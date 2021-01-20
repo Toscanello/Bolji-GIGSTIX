@@ -35,4 +35,11 @@ public class TipKupca {
 	public void setBrojBodova(Integer brojBodova) {
 		this.brojBodova = brojBodova;
 	}
+	
+	public static TipKupca stringToType(String s1, String s2, String s3) {
+		
+		TipKupca ret = new TipKupca(s1, Integer.parseInt(s2), Integer.parseInt(s3));
+		return ret;
+		
+	}
 }

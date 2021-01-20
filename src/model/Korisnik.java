@@ -65,5 +65,8 @@ public abstract class Korisnik {
 		this.uloga = uloga;
 	}
 	
+	public Korisnik() {
+		
+	}
 	
 }
