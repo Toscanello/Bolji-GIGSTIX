@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import io.Output;
 import model.Korisnik;
 import model.Kupac;
-import model.Manifestacija;
 
 public class KupacDAO {
 
@@ -15,6 +14,7 @@ public class KupacDAO {
 
 	public static boolean loadKupce() throws UnsupportedEncodingException, FileNotFoundException {
 
+		@SuppressWarnings("resource")
 		Output o = new Output("data/korisnici.txt");
 		ArrayList<Korisnik> listaKorisnika = new ArrayList<Korisnik>();
 		ArrayList<Kupac> listaKupaca = new ArrayList<Kupac>();
@@ -31,6 +31,10 @@ public class KupacDAO {
 		return true;
 	}
 
+	public static void dodajKupca(Kupac k) {
+		listaKupaca.add(k);
+	}
+
 	public static ArrayList<Kupac> getListaKupaca() {
 		return listaKupaca;
 	}
@@ -42,7 +46,7 @@ public class KupacDAO {
 	public static Kupac getKupacByUsername(String username) {
 
 		for (Kupac kupac : listaKupaca) {
-			if(kupac.getUsername().equals(username)) {
+			if (kupac.getUsername().equals(username)) {
 				return kupac;
 			}
 		}

@@ -1,9 +1,8 @@
 package model;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Kupac extends Korisnik {
@@ -11,13 +10,14 @@ public class Kupac extends Korisnik {
 	private Integer brojBodova;
 	private TipKupca tip;
 
-	public Kupac(String username, String password, String ime, String prezime, Pol pol, Date datum, String uloga, Integer brojBodova, TipKupca tip) {
+	public Kupac(String username, String password, String ime, String prezime, Pol pol, LocalDate datum, String uloga,
+			Integer brojBodova, TipKupca tip) {
 		super(username, password, ime, prezime, pol, datum, uloga);
 		this.karte = new ArrayList<Karta>();
 		this.brojBodova = brojBodova;
 		this.tip = tip;
 	}
-	
+
 	public Kupac() {
 		super();
 	}
@@ -29,7 +29,7 @@ public class Kupac extends Korisnik {
 	public void setKarte(List<Karta> karte) {
 		this.karte = karte;
 	}
-	
+
 	public void dodajKartu(Karta k) {
 		this.karte.add(k);
 	}
@@ -49,7 +49,7 @@ public class Kupac extends Korisnik {
 	public void setTip(TipKupca tip) {
 		this.tip = tip;
 	}
-	
+
 	public static Korisnik parseString(String line) {
 		String tokeni[] = line.split(",");
 		String username = tokeni[0];
@@ -57,17 +57,12 @@ public class Kupac extends Korisnik {
 		String ime = tokeni[2];
 		String prezime = tokeni[3];
 		Pol pol;
-		if(tokeni[4].equals(Pol.MUSKI)){
+		if (tokeni[4].equals(Pol.MUSKI)) {
 			pol = Pol.MUSKI;
-		}else {
+		} else {
 			pol = Pol.ZENSKI;
 		}
-		Date datum = null;
-		try {
-			datum = new SimpleDateFormat("dd.MM.yyyy").parse(tokeni[5]);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}  
+		LocalDate datum = LocalDate.parse(tokeni[5], DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 		String uloga = tokeni[6];
 		// ***********************************************
 		Integer brojBodova = Integer.parseInt(tokeni[7]);
@@ -76,6 +71,4 @@ public class Kupac extends Korisnik {
 		return k;
 	}
 
-	
-	
 }

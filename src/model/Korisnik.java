@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public abstract class Korisnik {
 	protected String username;
@@ -8,7 +8,7 @@ public abstract class Korisnik {
 	protected String ime;
 	protected String prezime;
 	protected Pol pol;
-	protected Date datum;
+	protected LocalDate datum;
 	protected String uloga; //admin prodavac kupac
 	
 	
@@ -42,10 +42,10 @@ public abstract class Korisnik {
 	public void setPol(Pol pol) {
 		this.pol = pol;
 	}
-	public Date getDatum() {
+	public LocalDate getDatum() {
 		return datum;
 	}
-	public void setDatum(Date datum) {
+	public void setDatum(LocalDate datum) {
 		this.datum = datum;
 	}
 	public String getUloga() {
@@ -54,7 +54,7 @@ public abstract class Korisnik {
 	public void setUloga(String uloga) {
 		this.uloga = uloga;
 	}
-	public Korisnik(String username, String password, String ime, String prezime, Pol pol, Date datum, String uloga) {
+	public Korisnik(String username, String password, String ime, String prezime, Pol pol, LocalDate datum, String uloga) {
 		super();
 		this.username = username;
 		this.password = password;
