@@ -45,4 +45,10 @@ public class Adresa {
 	public void setPostBroj(Integer postBroj) {
 		this.postBroj = postBroj;
 	}
+
+	@Override
+	public String toString() {
+		return ulica + " " + broj + " u " + mesto + " " + postBroj;
+	}
+	
 }

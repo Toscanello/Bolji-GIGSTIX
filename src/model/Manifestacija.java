@@ -1,21 +1,20 @@
 package model;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-public class Manifestacija {
+public class Manifestacija implements Comparable<Manifestacija> {
 	private Integer id;
 	private String naziv;
 	private String tip;
 	private Integer brojMesta;
-	private Date datum;
+	private LocalDateTime datum;
 	private Double cena;
 	private String status; // aktivan neaktivan
 	private Lokacija lokacija;
 	private String slika; // proveriti kako izgleda slika
 
-	public Manifestacija(Integer id, String naziv, String tip, Integer brojMesta, Date datum, Double cena,
+	public Manifestacija(Integer id, String naziv, String tip, Integer brojMesta, LocalDateTime datum, Double cena,
 			String status, Lokacija lokacija, String slika) {
 		super();
 		this.id = id;
@@ -53,11 +52,11 @@ public class Manifestacija {
 		this.brojMesta = brojMesta;
 	}
 
-	public Date getDatum() {
+	public LocalDateTime getDatum() {
 		return datum;
 	}
 
-	public void setDatum(Date datum) {
+	public void setDatum(LocalDateTime datum) {
 		this.datum = datum;
 	}
 
@@ -116,12 +115,8 @@ public class Manifestacija {
 		String naziv = tokeni[1];
 		String tip = tokeni[2];
 		Integer brojMesta = Integer.parseInt(tokeni[3]);
-		Date datum = null;
-		try {
-			datum = new SimpleDateFormat("dd.MM.yyyy").parse(tokeni[4]);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		LocalDateTime datum = null;
+		datum = LocalDateTime.parse(tokeni[4], DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm"));
 		Double cena = Double.valueOf(tokeni[5]);
 		String status = tokeni[6];
 		Double gDuz = Double.valueOf(tokeni[7]);
@@ -145,13 +140,18 @@ public class Manifestacija {
 		Lokacija l = k.getLokacija();
 		String gDuz = Double.toString(l.getGeoDuzina());
 		String gSir = Double.toString(l.getGeoSirina());
-		
-		Adresa adr = l.getAdresa();
-		
-		return k.getId() + "," + k.getNaziv() + "," + k.getTip() + "," + k.getBrojMesta() + "," + k.getDatum() + ","
-				+ k.getCena() + "," + k.getStatus() + "," + gDuz + "," + gSir + "," + adr.getUlica() + "," + adr.getBroj() + "," + adr.getMesto() + "," + 
-				 adr.getPostBroj() + "," + k.getSlika();
 
+		Adresa adr = l.getAdresa();
+
+		return k.getId() + "," + k.getNaziv() + "," + k.getTip() + "," + k.getBrojMesta() + "," + k.getDatum().toString() + ","
+				+ k.getCena() + "," + k.getStatus() + "," + gDuz + "," + gSir + "," + adr.getUlica() + ","
+				+ adr.getBroj() + "," + adr.getMesto() + "," + adr.getPostBroj() + "," + k.getSlika();
+
+	}
+
+	@Override
+	public int compareTo(Manifestacija o) {
+		return this.datum.compareTo(o.getDatum());
 	}
 
 }
