@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import DAO.KupacDAO;
+import DAO.KorisnikDAO;
 import DAO.ManifestacijeDAO;
 
 public class Karta {
@@ -105,8 +105,8 @@ public class Karta {
 		
 		Double cena = Double.valueOf(tokeni[3]);
 		//String username
-		KupacDAO.loadKupce();
-		Kupac k = KupacDAO.getKupacByUsername(tokeni[4]);
+		KorisnikDAO.loadKupce();
+		Kupac k = KorisnikDAO.getKupacByUsername(tokeni[4]);
 		
 		String status = tokeni[5];
 		String tip = tokeni[6];

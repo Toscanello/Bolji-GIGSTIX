@@ -8,44 +8,32 @@ import io.Output;
 import model.Korisnik;
 import model.Kupac;
 
-public class KupacDAO {
+public class KorisnikDAO {
 
-	public static ArrayList<Kupac> listaKupaca;
+	public static ArrayList<Kupac> listaKorisnika;
 
 	public static boolean loadKupce() throws UnsupportedEncodingException, FileNotFoundException {
 
 		@SuppressWarnings("resource")
 		Output o = new Output("data/korisnici.txt");
 		ArrayList<Korisnik> listaKorisnika = new ArrayList<Korisnik>();
-		ArrayList<Kupac> listaKupaca = new ArrayList<Kupac>();
 		o.ucitajKorisnike(listaKorisnika);
-
-		for (Korisnik korisnik : listaKorisnika) {
-			if (korisnik.getUloga().equals("Kupac")) {
-				listaKupaca.add((Kupac) korisnik);
-			}
-		}
-		setListaKupaca(listaKupaca);
-		if (listaKupaca.isEmpty())
+		if (listaKorisnika.isEmpty())
 			return false;
 		return true;
 	}
 
-	public static void dodajKupca(Kupac k) {
-		listaKupaca.add(k);
+	public static ArrayList<Kupac> getListaKorisnika() {
+		return listaKorisnika;
 	}
 
-	public static ArrayList<Kupac> getListaKupaca() {
-		return listaKupaca;
-	}
-
-	public static void setListaKupaca(ArrayList<Kupac> listaKupaca) {
-		KupacDAO.listaKupaca = listaKupaca;
+	public static void setListaKorisnika(ArrayList<Kupac> listaKorisnika) {
+		KorisnikDAO.listaKorisnika = listaKorisnika;
 	}
 
 	public static Kupac getKupacByUsername(String username) {
 
-		for (Kupac kupac : listaKupaca) {
+		for (Kupac kupac : listaKorisnika) {
 			if (kupac.getUsername().equals(username)) {
 				return kupac;
 			}
