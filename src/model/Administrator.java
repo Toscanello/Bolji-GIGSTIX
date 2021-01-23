@@ -20,4 +20,10 @@ public class Administrator extends Korisnik {
 		Administrator a = new Administrator(username, password, ime, prezime, pol, datum, uloga);
 		return a;
 	}
+
+	public static String toFileString(Administrator k) {
+		
+		 return k.username + "," + k.password + "," + k.ime + "," + k.prezime + "," + k.pol + "," + k.datum + "," + k.uloga;
+	
+	}
 }

@@ -52,7 +52,7 @@ public class Kupac extends Korisnik {
 		String password = tokeni[1];
 		String ime = tokeni[2];
 		String prezime = tokeni[3];
-		String pol=tokeni[4];
+		String pol = tokeni[4];
 		String datum = tokeni[5];
 		String uloga = tokeni[6];
 		// ***********************************************
@@ -60,6 +60,16 @@ public class Kupac extends Korisnik {
 		TipKupca tp = TipKupca.stringToType(tokeni[8], tokeni[9], tokeni[10]);
 		Kupac k = new Kupac(username, password, ime, prezime, pol, datum, uloga, brojBodova, tp);
 		return k;
+	}
+
+	public static String toFileString(Kupac k) {
+		
+		String s1 = k.getTip().getImeTipa();
+		String s2 = Integer.toString(k.getTip().getPopust());
+		String s3 = Integer.toString(k.getTip().getBrojBodova());
+		
+		return k.username + "," + k.password + "," + k.ime + "," + k.prezime + "," + k.pol + "," + k.datum + "," + k.uloga + "," + k.brojBodova + "," + s1 + "," + s2 + "," + s3;
+		
 	}
 
 }

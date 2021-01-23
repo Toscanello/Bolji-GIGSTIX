@@ -15,8 +15,8 @@ public class Manifestacija {
 	private Lokacija lokacija;
 	private String slika; // proveriti kako izgleda slika
 
-	public Manifestacija(Integer id, String naziv, String tip, Integer brojMesta, Date datum, Double cena, String status,
-			Lokacija lokacija, String slika) {
+	public Manifestacija(Integer id, String naziv, String tip, Integer brojMesta, Date datum, Double cena,
+			String status, Lokacija lokacija, String slika) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -100,12 +100,14 @@ public class Manifestacija {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
+	public String getStatus() {
+		return status;
+	}
+
 	//
 	public static void returnManifestaciju(Integer id) {
-		
-		
-		
+
 	}
 
 	public static Manifestacija parseString(String line) {
@@ -119,7 +121,7 @@ public class Manifestacija {
 			datum = new SimpleDateFormat("dd.MM.yyyy").parse(tokeni[4]);
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}  
+		}
 		Double cena = Double.valueOf(tokeni[5]);
 		String status = tokeni[6];
 		Double gDuz = Double.valueOf(tokeni[7]);
@@ -129,13 +131,27 @@ public class Manifestacija {
 		String mesto = tokeni[11];
 		Integer post = Integer.valueOf(tokeni[12]);
 		String slika = tokeni[13]; // Slika ?
-		
+
 		Adresa adr = new Adresa(ulica, broj, mesto, post);
 		Lokacija loc = new Lokacija(gDuz, gSir, adr);
-		
+
 		Manifestacija manif = new Manifestacija(id, naziv, tip, brojMesta, datum, cena, status, loc, slika);
-		
+
 		return manif;
+	}
+
+	public static String toFileString(Manifestacija k) {
+
+		Lokacija l = k.getLokacija();
+		String gDuz = Double.toString(l.getGeoDuzina());
+		String gSir = Double.toString(l.getGeoSirina());
+		
+		Adresa adr = l.getAdresa();
+		
+		return k.getId() + "," + k.getNaziv() + "," + k.getTip() + "," + k.getBrojMesta() + "," + k.getDatum() + ","
+				+ k.getCena() + "," + k.getStatus() + "," + gDuz + "," + gSir + "," + adr.getUlica() + "," + adr.getBroj() + "," + adr.getMesto() + "," + 
+				 adr.getPostBroj() + "," + k.getSlika();
+
 	}
 
 }

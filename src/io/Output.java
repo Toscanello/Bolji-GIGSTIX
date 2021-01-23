@@ -84,7 +84,7 @@ public class Output extends BufferedReader {
 	
 	//******************************************************
 	
-public void ucitajKarte(ArrayList<Karta> lista) {
+	public void ucitajKarte(ArrayList<Karta> lista) {
 		
 		try {
 			
@@ -110,9 +110,9 @@ public void ucitajKarte(ArrayList<Karta> lista) {
 	
 	}
 
-//******************************************************
+	//******************************************************
 
-public void ucitajManifestacije(ArrayList<Manifestacija> lista) {
+	public void ucitajManifestacije(ArrayList<Manifestacija> lista) {
 		
 		try {
 			

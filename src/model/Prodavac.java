@@ -39,4 +39,10 @@ public class Prodavac extends Korisnik {
 		Prodavac p = new Prodavac(username, password, ime, prezime, pol, datum, uloga);
 		return p;
 	}
+
+	public static String toFileString(Prodavac k) {
+		
+		return k.username + "," + k.password + "," + k.ime + "," + k.prezime + "," + k.pol + "," + k.datum + "," + k.uloga;
+		
+	}
 }

@@ -10,9 +10,9 @@ import model.Kupac;
 
 public class KorisnikDAO {
 
-	public static ArrayList<Kupac> listaKorisnika;
+	public static ArrayList<Korisnik> listaKorisnika;
 
-	public static boolean loadKupce() throws UnsupportedEncodingException, FileNotFoundException {
+	public static boolean loadKorisnike() throws UnsupportedEncodingException, FileNotFoundException {
 
 		@SuppressWarnings("resource")
 		Output o = new Output("data/korisnici.txt");
@@ -23,19 +23,21 @@ public class KorisnikDAO {
 		return true;
 	}
 
-	public static ArrayList<Kupac> getListaKorisnika() {
+	public static ArrayList<Korisnik> getListaKorisnika() {
 		return listaKorisnika;
 	}
 
-	public static void setListaKorisnika(ArrayList<Kupac> listaKorisnika) {
+	public static void setListaKorisnika(ArrayList<Korisnik> listaKorisnika) {
 		KorisnikDAO.listaKorisnika = listaKorisnika;
 	}
 
 	public static Kupac getKupacByUsername(String username) {
 
-		for (Kupac kupac : listaKorisnika) {
-			if (kupac.getUsername().equals(username)) {
-				return kupac;
+		for (Korisnik korisnik : listaKorisnika) {
+			if (korisnik.getUloga().equals("Kupac")) {
+				if (korisnik.getUsername().equals(username)) {
+					return (Kupac) korisnik;
+				}
 			}
 		}
 		return null;

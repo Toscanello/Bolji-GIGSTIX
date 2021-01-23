@@ -105,13 +105,25 @@ public class Karta {
 		
 		Double cena = Double.valueOf(tokeni[3]);
 		//String username
-		KorisnikDAO.loadKupce();
+		KorisnikDAO.loadKorisnike();
 		Kupac k = KorisnikDAO.getKupacByUsername(tokeni[4]);
 		
 		String status = tokeni[5];
 		String tip = tokeni[6];
 		Karta karta = new Karta(id, m, datum, cena, k, status, tip);
 		return karta;
+	}
+
+	public static String toFileString(Karta k) {
+		
+		Manifestacija m = k.getManifestacija();
+		String idManifestacije = Integer.toString(m.getId());
+		
+		Kupac kup = k.getKupac();
+		String kupacUsername = kup.getUsername();
+		
+		return k.getId() + "," + idManifestacije + "," + k.getDatum() + "," + k.getCena() + "," + kupacUsername + "," + k.getStatus() + "," + k.getTip();
+		
 	}
 
 }
