@@ -1,11 +1,8 @@
 package model;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 public class Administrator extends Korisnik {
 
-	public Administrator(String username, String password, String ime, String prezime, Pol pol, LocalDate datum,
+	public Administrator(String username, String password, String ime, String prezime, String pol, String datum,
 			String uloga) {
 		super(username, password, ime, prezime, pol, datum, uloga);
 	}
@@ -16,14 +13,8 @@ public class Administrator extends Korisnik {
 		String password = tokeni[1];
 		String ime = tokeni[2];
 		String prezime = tokeni[3];
-		Pol pol;
-		if (tokeni[4].equals(Pol.MUSKI)) {
-			pol = Pol.MUSKI;
-		} else {
-			pol = Pol.ZENSKI;
-		}
-		LocalDate datum = LocalDate.parse(tokeni[5], DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-
+		String pol = tokeni[4];
+		String datum = tokeni[5];
 		String uloga = tokeni[6];
 		// ***********************************************
 		Administrator a = new Administrator(username, password, ime, prezime, pol, datum, uloga);

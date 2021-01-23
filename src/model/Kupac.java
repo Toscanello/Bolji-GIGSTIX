@@ -10,16 +10,12 @@ public class Kupac extends Korisnik {
 	private Integer brojBodova;
 	private TipKupca tip;
 
-	public Kupac(String username, String password, String ime, String prezime, Pol pol, LocalDate datum, String uloga,
+	public Kupac(String username, String password, String ime, String prezime, String pol, String datum, String uloga,
 			Integer brojBodova, TipKupca tip) {
 		super(username, password, ime, prezime, pol, datum, uloga);
 		this.karte = new ArrayList<Karta>();
 		this.brojBodova = brojBodova;
 		this.tip = tip;
-	}
-
-	public Kupac() {
-		super();
 	}
 
 	public List<Karta> getKarte() {
@@ -56,13 +52,8 @@ public class Kupac extends Korisnik {
 		String password = tokeni[1];
 		String ime = tokeni[2];
 		String prezime = tokeni[3];
-		Pol pol;
-		if (tokeni[4].equals(Pol.MUSKI)) {
-			pol = Pol.MUSKI;
-		} else {
-			pol = Pol.ZENSKI;
-		}
-		LocalDate datum = LocalDate.parse(tokeni[5], DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+		String pol=tokeni[4];
+		String datum = tokeni[5];
 		String uloga = tokeni[6];
 		// ***********************************************
 		Integer brojBodova = Integer.parseInt(tokeni[7]);

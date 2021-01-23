@@ -12,7 +12,7 @@ Vue.component("prijavljivanje",{
 	},
 	
 	template:`
-		<form id = "loginForm" method="POST" @submit = "submitForm">
+		<form id = "loginForm" method="POST" @submit.prevent = "submitForm">
 			<label for="uname"><b>Username</b></label>
 			<input type="text" v-model="korisnik.username" placeholder="Enter Username" name="uname" required>
 
@@ -24,14 +24,15 @@ Vue.component("prijavljivanje",{
 	`
 		,
 		methods : {
-			submitForm :function(e){
-				e.preventDefault();
+			submitForm :function(){
 				axios
 				.post('/login',{
 					username:this.korisnik.username,
 					password:this.korisnik.password
 				})
-				.then(response => this.$router.push('/'))
+				.then(response => {
+					localStorage.setItem('korisnik',response.data.username)	
+				})
 			}
 		},
 });

@@ -8,7 +8,7 @@ import java.util.List;
 public class Prodavac extends Korisnik {
 	private List<Manifestacija> manifestacija;
 
-	public Prodavac(String username, String password, String ime, String prezime, Pol pol, LocalDate datum,
+	public Prodavac(String username, String password, String ime, String prezime, String pol, String datum,
 			String uloga) {
 		super(username, password, ime, prezime, pol, datum, uloga);
 		this.manifestacija = new ArrayList<Manifestacija>();
@@ -32,13 +32,8 @@ public class Prodavac extends Korisnik {
 		String password = tokeni[1];
 		String ime = tokeni[2];
 		String prezime = tokeni[3];
-		Pol pol;
-		if (tokeni[4].equals(Pol.MUSKI)) {
-			pol = Pol.MUSKI;
-		} else {
-			pol = Pol.ZENSKI;
-		}
-		LocalDate datum = LocalDate.parse(tokeni[5], DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+		String pol = tokeni[4];
+		String datum = tokeni[5];
 		String uloga = tokeni[6];
 		// ***********************************************
 		Prodavac p = new Prodavac(username, password, ime, prezime, pol, datum, uloga);

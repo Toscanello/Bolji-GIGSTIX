@@ -4,11 +4,13 @@
 
 const Prijava = {template: '<prijavljivanje></prijavljivanje>'}
 const HomePage = {template:'<home-page></home-page>'}
+const Registracija = {template:'<registracija></registracija>'}
 
 const router = new VueRouter({
 	mode: 'hash',
 	routes: [
-		{path:'/',component: Prijava},
+		{path:'/login',component: Prijava},
+		{path:'/registruj',component: Registracija},
 		{path:'/home-page',component: HomePage}
 	]
 });
@@ -16,5 +18,5 @@ const router = new VueRouter({
 
 var app = new Vue({
 	router,
-	el: '#prijava'
+	el: '#app'
 });
