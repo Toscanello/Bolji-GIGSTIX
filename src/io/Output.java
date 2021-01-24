@@ -88,7 +88,7 @@ public class Output extends BufferedReader {
 		
 		try {
 			
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("data/korisnici.txt"), "UTF-8"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("data/karte.txt"), "UTF-8"));
 			
 			String line = "";
 			
@@ -116,7 +116,7 @@ public class Output extends BufferedReader {
 		
 		try {
 			
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("data/korisnici.txt"), "UTF-8"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("data/manifestacije.txt"), "UTF-8"));
 			
 			String line = "";
 			
