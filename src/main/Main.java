@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import DAO.ManifestacijeDAO;
 import model.Adresa;
@@ -23,6 +25,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		port(9090);
 		Gson g = new Gson();
+		JsonParser parser = new JsonParser();  
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
 		after((req, res) -> res.type("application/json"));
 		ManifestacijeDAO.dodajManifestaciju(new Manifestacija(1, "koncert Zdravka Colica", "koncert", 250, LocalDateTime.parse("2007-12-03T10:15:30."), 2000.0,
@@ -43,6 +46,12 @@ public class Main {
 			Korisnik k = g.fromJson(req.body(), Korisnik.class);
 			res.status(200);
 			return g.toJson(k);
+		});
+		post("/regManifestacije", (req, res) -> {
+			JsonObject jsonObject = (JsonObject) parser.parse(req.body());  
+			//Manifestacija m = new Manifestacija()
+			System.out.println(jsonObject.get("naziv"));
+			return "Pusi ga";
 		});
 		
 		get("/manifestacije/getAll",(req,res)->{
