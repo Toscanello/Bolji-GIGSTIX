@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import com.google.gson.Gson;
 
+import DAO.KorisnikDAO;
 import DAO.ManifestacijeDAO;
 import io.Input;
 import model.Adresa;
@@ -27,6 +28,7 @@ public class Main {
 		port(9090);
 		Gson g = new Gson();
 		ManifestacijeDAO.loadManifestacije();
+		KorisnikDAO.loadKorisnike();
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
 		after((req, res) -> res.type("application/json"));
 		ManifestacijeDAO.dodajManifestaciju(new Manifestacija("koncert Zdravka Colica", "koncert", 250,
@@ -43,8 +45,12 @@ public class Main {
 		});
 		post("/login", (req, res) -> {
 			Korisnik k = g.fromJson(req.body(), Korisnik.class);
-			System.out.println(k.getUsername());
-			return g.toJson(k);
+			if((k=KorisnikDAO.getKorisnikByUsername(k.getUsername()))!=null) {
+				res.status(200);
+				return g.toJson(k);
+			}
+			res.status(404);
+			return "Greska";
 		});
 		post("/registruj", (req, res) -> {
 			Korisnik k = g.fromJson(req.body(), Korisnik.class);
@@ -55,9 +61,8 @@ public class Main {
 			@SuppressWarnings("unchecked")
 			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
 			String[] lokacija = mapa.get("lokacija").toString().split(",");
-			Lokacija lo = new Lokacija(Double.parseDouble(lokacija[0]), Double.parseDouble(lokacija[1]),
-					new Adresa((lokacija[2]), Integer.parseInt(lokacija[3]), lokacija[4],
-							Integer.parseInt(lokacija[5])));
+			Lokacija lo = new Lokacija(Double.parseDouble(lokacija[0]), Double.parseDouble(lokacija[1]), new Adresa(
+					(lokacija[2]), Integer.parseInt(lokacija[3]), lokacija[4], Integer.parseInt(lokacija[5])));
 			Manifestacija m = new Manifestacija(mapa.get("naziv"), mapa.get("tip"),
 					Integer.parseInt(mapa.get("brojMesta")),
 					LocalDateTime.parse(mapa.get("datum"), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),

@@ -31,7 +31,8 @@ Vue.component("prijavljivanje",{
 					password:this.korisnik.password
 				})
 				.then(response => {
-					localStorage.setItem('korisnik',response.data.username)	
+					localStorage.setItem('korisnik',JSON.stringify(response.data))	
+					window.location.replace('/')
 				})
 			}
 		},
