@@ -48,5 +48,9 @@ Vue.component("header-comp",{
             </div>
         </div>
     </nav>
-    `
+    `,
+    mounted(){
+        this.korisnik=JSON.parse(localStorage.getItem('korisnik'))
+        
+    }
 })

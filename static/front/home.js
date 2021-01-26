@@ -18,6 +18,7 @@ Vue.component("home-page",{
                             u {{m.datum.time.hour}}:{{m.datum.time.minute}}
                              na lokaciji {{m.lokacija.adresa.ulica}} {{m.lokacija.adresa.broj}}
                               {{m.lokacija.adresa.mesto}} {{m.lokacija.adresa.postBroj}}</p>
+                              <button type = "button" v-on:click="prikazManifestacije(m)" >Detalji</button>
                         </div>
                     </div>
                 </div>
@@ -28,6 +29,18 @@ Vue.component("home-page",{
     mounted(){
         axios
         .get('manifestacije/getAll')
-        .then(response=>{this.manifestacije=response.data; console.log(this.manifestacije)})
+        .then(response=>{this.manifestacije=response.data;})
+        localStorage.removeItem('manif')
+    },
+    methods:{
+        prikazManifestacije:function(m){
+            axios
+            .get(`prikazManif/${m.naziv}`)
+            .then(response=>{
+                const manif = response.data
+                localStorage.setItem('manif',JSON.stringify(manif))
+                this.$router.push('/prikazManifestacije')
+            })
+        }
     }
 })
