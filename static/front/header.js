@@ -28,25 +28,33 @@ Vue.component("header-comp",{
                             <a class="nav-link" href="/#/registruj">Registruj se</a>
                         </li>
                     </div>
-                    <div v-if="(korisnik.uloga==='kupac')||(korisnik.uloga==='prodavac')">
+                    <div v-if="(korisnik.uloga==='Kupac')||(korisnik.uloga==='Prodavac')">
                         <li class="nav-item">
                             <a class="nav-link" href="/#/edit">Profil</a>
                         </li>
                     </div>
-                    <div v-if="(korisnik.uloga==='admin')">
+                    <div v-if="(korisnik.uloga==='Admin')">
                         <li class="nav-item">
                             <a class="nav-link" href="/#/registrujProdavca">Registruj prodavca</a>
                         </li>
+                    </div>
+                    <div v-if="(korisnik.uloga==='Admin')">
                         <li class="nav-item">
                             <a class="nav-link" href="/#/korisniciPregled">Pregled korisnika</a>
                         </li>
                     </div>
+                    <div v-if="(korisnik !=='')">
+                        <li class="nav-item">
+                            <p>Dobro dosli {{korisnik.ime}}</p>
+                        </li>
+                    </div>
                 </ul>
-                <form>
-                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-                </form>
             </div>
         </div>
     </nav>
-    `
+    `,
+    mounted(){
+        this.korisnik=JSON.parse(localStorage.getItem('korisnik'))
+        
+    }
 })

@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import DAO.KorisnikDAO;
@@ -92,7 +91,6 @@ public class Karta {
 		String id = tokeni[0];
 		String manif = tokeni[1];
 		
-		ArrayList<Manifestacija> tempList = new ArrayList<Manifestacija>();
 		ManifestacijeDAO.loadManifestacije();
 		Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(manif);
 		
@@ -106,7 +104,7 @@ public class Karta {
 		Double cena = Double.valueOf(tokeni[3]);
 		//String username
 		KorisnikDAO.loadKorisnike();
-		Kupac k = KorisnikDAO.getKupacByUsername(tokeni[4]);
+		Kupac k = (Kupac) KorisnikDAO.getKorisnikByUsername(tokeni[4]);
 		
 		String status = tokeni[5];
 		String tip = tokeni[6];
