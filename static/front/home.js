@@ -21,11 +21,10 @@ Vue.component("home-page",{
                               {{m.lokacija.adresa.mesto}} {{m.lokacija.adresa.postBroj}}</p>
                               <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Pregled</button>
-
+                                    <button type = "button" v-on:click="prikazManifestacije(m)" >Detalji</button>
                                     <button  v-if="(korisnik.uloga==='Kupac') type="button" class="btn btn-sm btn-outline-secondary" v-on:click="rezervisiKartu(m)">Rezervisi karte</button>
                                 </div>
-                            </div>
+                             </div>
                         </div>
                     </div>
                 </div>
@@ -42,6 +41,18 @@ Vue.component("home-page",{
         this.korisnik = JSON.parse(localStorage.getItem('korisnik'))
         axios
         .get('manifestacije/getAll')
-        .then(response=>{this.manifestacije=response.data; console.log(this.manifestacije)})
+        .then(response=>{this.manifestacije=response.data;})
+        localStorage.removeItem('manif')
+    },
+    methods:{
+        prikazManifestacije:function(m){
+            axios
+            .get(`prikazManif/${m.naziv}`)
+            .then(response=>{
+                const manif = response.data
+                localStorage.setItem('manif',JSON.stringify(manif))
+                this.$router.push('/prikazManifestacije')
+            })
+        }
     }
 })

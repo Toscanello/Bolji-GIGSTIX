@@ -77,6 +77,12 @@ public class Main {
 			res.type("application/json");
 			return g.toJson(ManifestacijeDAO.listaManifestacija);
 		});
+		
+		get("/prikazManif/:id",(req,res)->{
+			String naziv = req.params(":id");
+			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(naziv);
+			return g.toJson(m);
+		});
 	}
 
 }
