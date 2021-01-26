@@ -1,7 +1,8 @@
 Vue.component("home-page",{
     data: function(){
         return{
-            manifestacije:null
+            manifestacije:null,
+            korisnik:""
         }
     },
     template: `
@@ -18,14 +19,27 @@ Vue.component("home-page",{
                             u {{m.datum.time.hour}}:{{m.datum.time.minute}}
                              na lokaciji {{m.lokacija.adresa.ulica}} {{m.lokacija.adresa.broj}}
                               {{m.lokacija.adresa.mesto}} {{m.lokacija.adresa.postBroj}}</p>
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Pregled</button>
+
+                                    <button  v-if="(korisnik.uloga==='Kupac') type="button" class="btn btn-sm btn-outline-secondary" v-on:click="rezervisiKartu(m)">Rezervisi karte</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    `,
+    `,methods:{
+        rezervisiKartu:function(m){
+            axios
+            .get(`rezervacija/${m.naziv}`)
+        }
+    },
     mounted(){
+        this.korisnik = JSON.parse(localStorage.getItem('korisnik'))
         axios
         .get('manifestacije/getAll')
         .then(response=>{this.manifestacije=response.data; console.log(this.manifestacije)})
