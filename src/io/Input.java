@@ -43,6 +43,7 @@ public class Input extends OutputStreamWriter {
 			
 			try {
 				this.write(string + "\n");
+				this.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -64,6 +65,7 @@ public class Input extends OutputStreamWriter {
 			
 			try {
 				this.write(string + "\n");
+				this.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -75,7 +77,7 @@ public class Input extends OutputStreamWriter {
 	//******************************************************
 	
 	
-		public void snimiManifestacije(ArrayList<Manifestacija> lista) {
+		public void snimiManifestacije(ArrayList<Manifestacija> lista) throws IOException {
 			
 			String string = "";
 			
@@ -85,6 +87,7 @@ public class Input extends OutputStreamWriter {
 				
 				try {
 					this.write(string + "\n");
+					this.flush();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

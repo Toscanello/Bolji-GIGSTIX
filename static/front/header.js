@@ -1,7 +1,7 @@
 Vue.component("header-comp",{
     data: function(){
         return{
-            korisnik:null
+            korisnik:""
         }
     },
 
@@ -16,19 +16,29 @@ Vue.component("header-comp",{
             <div class="collapse navbar-collapse" id="navbarsExample02">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" aria-current="page" href="/home-page">Home</a>
+                        <a class="nav-link" aria-current="page" href="/#/home-page">Home</a>
                     </li>
                     <div v-if="korisnik===''">
                         <li class="nav-item">
                             <a class="nav-link" href="/#/login">Prijavi se</a>
                         </li>
+                    </div>
+                    <div v-if="korisnik===''">
                         <li class="nav-item">
                             <a class="nav-link" href="/#/registruj">Registruj se</a>
                         </li>
                     </div>
-                    <div v-if="(korisnik.role==='kupac')||(korisnik.role==='prodavac')">
+                    <div v-if="(korisnik.uloga==='kupac')||(korisnik.uloga==='prodavac')">
                         <li class="nav-item">
                             <a class="nav-link" href="/#/edit">Profil</a>
+                        </li>
+                    </div>
+                    <div v-if="(korisnik.uloga==='admin')">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#/registrujProdavca">Registruj prodavca</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#/korisniciPregled">Pregled korisnika</a>
                         </li>
                     </div>
                 </ul>

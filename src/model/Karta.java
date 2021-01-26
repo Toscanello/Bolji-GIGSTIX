@@ -90,11 +90,11 @@ public class Karta {
 	public static Karta parseString(String line) throws UnsupportedEncodingException, FileNotFoundException {
 		String tokeni[] = line.split(",");
 		String id = tokeni[0];
-		Integer idManifestacije = Integer.parseInt(tokeni[1]);
+		String manif = tokeni[1];
 		
 		ArrayList<Manifestacija> tempList = new ArrayList<Manifestacija>();
 		ManifestacijeDAO.loadManifestacije();
-		Manifestacija m = ManifestacijeDAO.getManifestacijaByID(idManifestacije);
+		Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(manif);
 		
 		Date datum = null;
 		try {
@@ -117,7 +117,7 @@ public class Karta {
 	public static String toFileString(Karta k) {
 		
 		Manifestacija m = k.getManifestacija();
-		String idManifestacije = Integer.toString(m.getId());
+		String idManifestacije = m.getNaziv();
 		
 		Kupac kup = k.getKupac();
 		String kupacUsername = kup.getUsername();

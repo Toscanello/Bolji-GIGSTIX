@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Manifestacija implements Comparable<Manifestacija> {
-	private Integer id;
 	private String naziv;
 	private String tip;
 	private Integer brojMesta;
@@ -14,10 +13,9 @@ public class Manifestacija implements Comparable<Manifestacija> {
 	private Lokacija lokacija;
 	private String slika; // proveriti kako izgleda slika
 
-	public Manifestacija(Integer id, String naziv, String tip, Integer brojMesta, LocalDateTime datum, Double cena,
+	public Manifestacija(String naziv, String tip, Integer brojMesta, LocalDateTime datum, Double cena,
 			String status, Lokacija lokacija, String slika) {
 		super();
-		this.id = id;
 		this.naziv = naziv;
 		this.tip = tip;
 		this.brojMesta = brojMesta;
@@ -92,14 +90,6 @@ public class Manifestacija implements Comparable<Manifestacija> {
 		this.slika = slika;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public String getStatus() {
 		return status;
 	}
@@ -111,26 +101,25 @@ public class Manifestacija implements Comparable<Manifestacija> {
 
 	public static Manifestacija parseString(String line) {
 		String tokeni[] = line.split(",");
-		Integer id = Integer.parseInt(tokeni[0]);
-		String naziv = tokeni[1];
-		String tip = tokeni[2];
-		Integer brojMesta = Integer.parseInt(tokeni[3]);
+		String naziv = tokeni[0];
+		String tip = tokeni[1];
+		Integer brojMesta = Integer.parseInt(tokeni[2]);
 		LocalDateTime datum = null;
-		datum = LocalDateTime.parse(tokeni[4], DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm"));
-		Double cena = Double.valueOf(tokeni[5]);
-		String status = tokeni[6];
-		Double gDuz = Double.valueOf(tokeni[7]);
-		Double gSir = Double.valueOf(tokeni[8]);
-		String ulica = tokeni[9];
-		Integer broj = Integer.valueOf(tokeni[10]);
-		String mesto = tokeni[11];
-		Integer post = Integer.valueOf(tokeni[12]);
-		String slika = tokeni[13]; // Slika ?
+		datum = LocalDateTime.parse(tokeni[3]);
+		Double cena = Double.valueOf(tokeni[4]);
+		String status = tokeni[5];
+		Double gDuz = Double.valueOf(tokeni[6]);
+		Double gSir = Double.valueOf(tokeni[7]);
+		String ulica = tokeni[8];
+		Integer broj = Integer.valueOf(tokeni[9]);
+		String mesto = tokeni[10];
+		Integer post = Integer.valueOf(tokeni[11]);
+		String slika = tokeni[12]; // Slika ?
 
 		Adresa adr = new Adresa(ulica, broj, mesto, post);
 		Lokacija loc = new Lokacija(gDuz, gSir, adr);
 
-		Manifestacija manif = new Manifestacija(id, naziv, tip, brojMesta, datum, cena, status, loc, slika);
+		Manifestacija manif = new Manifestacija(naziv, tip, brojMesta, datum, cena, status, loc, slika);
 
 		return manif;
 	}
@@ -143,7 +132,7 @@ public class Manifestacija implements Comparable<Manifestacija> {
 
 		Adresa adr = l.getAdresa();
 
-		return k.getId() + "," + k.getNaziv() + "," + k.getTip() + "," + k.getBrojMesta() + "," + k.getDatum().toString() + ","
+		return k.getNaziv() + "," + k.getTip() + "," + k.getBrojMesta() + "," + k.getDatum().toString() + ","
 				+ k.getCena() + "," + k.getStatus() + "," + gDuz + "," + gSir + "," + adr.getUlica() + ","
 				+ adr.getBroj() + "," + adr.getMesto() + "," + adr.getPostBroj() + "," + k.getSlika();
 

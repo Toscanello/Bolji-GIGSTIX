@@ -30,10 +30,10 @@ public class ManifestacijeDAO {
 		ManifestacijeDAO.listaManifestacija = listaManifestacija;
 	}
 
-	public static Manifestacija getManifestacijaByID(Integer idManifestacije) {
+	public static Manifestacija getManifestacijaByNaziv(String naziv) {
 
 		for (Manifestacija manifestacija : listaManifestacija) {
-			if (idManifestacije == manifestacija.getId()) {
+			if (naziv.equals(manifestacija.getNaziv())) {
 				return manifestacija;
 			}
 		}

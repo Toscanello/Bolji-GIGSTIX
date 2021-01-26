@@ -35,7 +35,7 @@ Vue.component("registracijamanifestacije",{
             </div>
             <div>
                 <label for="lokacija"><b>Lokacija</b></label>
-                <input type="text" v-model="lokacija" placeholder = "Uneti lokaciju manifestacije-example(44.58,41.25,4.juli,27,Zrenjanin,23000)" required/>
+                <input type="text" v-model="lokacija" placeholder = "Example(44.58,41.25,4.juli,27,Zrenjanin,23000)" required/>
             </div>
             <div>
                 <button type = "submit">Dodaj</button>
@@ -56,7 +56,9 @@ Vue.component("registracijamanifestacije",{
             axios
             .post('/regManifestacije', manif)
             .then(response=>{
-                
+                console.log(response.data)
+                window.location.replace('/')
+                this.$router.push('/home-page')
             })
         }
     }
