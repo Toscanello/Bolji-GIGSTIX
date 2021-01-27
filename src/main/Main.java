@@ -52,6 +52,11 @@ public class Main {
 			res.status(404);
 			return "Greska";
 		});
+		
+		get("/logout", (req, res) -> {
+			return null;
+		});
+		
 		post("/registruj", (req, res) -> {
 			Korisnik k = g.fromJson(req.body(), Korisnik.class);
 			res.status(200);
@@ -78,11 +83,20 @@ public class Main {
 			return g.toJson(ManifestacijeDAO.listaManifestacija);
 		});
 		
+		get("/korisnici/getAll", (req, res) -> {
+			res.type("application/json");
+			return g.toJson(KorisnikDAO.listaKorisnika);
+		});
+		
 		get("/prikazManif/:id",(req,res)->{
 			String naziv = req.params(":id");
 			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(naziv);
 			return g.toJson(m);
 		});
+		
+		get("/prikazKorisnika",(req,res)->{
+			
+			return "Succ";
+		});
 	}
-
 }

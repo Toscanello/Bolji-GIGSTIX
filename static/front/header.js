@@ -33,12 +33,12 @@ Vue.component("header-comp",{
                             <a class="nav-link" href="/#/edit">Profil</a>
                         </li>
                     </div>
-                    <div v-if="(korisnik.uloga==='Admin')">
+                    <div v-if="(korisnik.uloga==='Administrator')">
                         <li class="nav-item">
                             <a class="nav-link" href="/#/registrujProdavca">Registruj prodavca</a>
                         </li>
                     </div>
-                    <div v-if="(korisnik.uloga==='Admin')">
+                    <div v-if="(korisnik.uloga==='Administrator')">
                         <li class="nav-item">
                             <a class="nav-link" href="/#/korisniciPregled">Pregled korisnika</a>
                         </li>
@@ -48,6 +48,11 @@ Vue.component("header-comp",{
                             <p>Dobro dosli {{korisnik.ime}}</p>
                         </li>
                     </div>
+
+                    <li class="nav-item">
+                            <a class="nav-link" href="/#/logout">Logout</a>
+                    </li>
+
                 </ul>
             </div>
         </div>
