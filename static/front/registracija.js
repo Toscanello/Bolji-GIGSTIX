@@ -50,7 +50,7 @@ Vue.component("registracija",{
                 prezime: this.prezime,
                 pol:this.pol,
                 datum:this.datum,
-                uloga:"kupac"
+                uloga:"Kupac"
             }
             axios
             .post('/registruj',user)

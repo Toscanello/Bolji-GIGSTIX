@@ -8,8 +8,12 @@ import static spark.Spark.staticFiles;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
@@ -19,8 +23,10 @@ import DAO.ManifestacijeDAO;
 import io.Input;
 import model.Adresa;
 import model.Korisnik;
+import model.Kupac;
 import model.Lokacija;
 import model.Manifestacija;
+import model.TipKupca;
 
 public class Main {
 
@@ -58,9 +64,35 @@ public class Main {
 		});
 		
 		post("/registruj", (req, res) -> {
-			Korisnik k = g.fromJson(req.body(), Korisnik.class);
+			
+			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
+			if(!mapa.get("pol").equals("MUSKI") && !mapa.get("pol").equals("ZENSKI")) {
+				res.status(404);
+				return "Error.";
+			}
+			
+			String datum = mapa.get("datum");
+			Date dateTest = null;
+			try {
+				dateTest = new SimpleDateFormat("dd.MM.yyyy").parse(datum);
+			} catch (ParseException e) {
+				res.status(404);
+				return "Error.";
+			}
+			
+			Kupac k = new Kupac(mapa.get("username"), mapa.get("password"), mapa.get("ime"), mapa.get("prezime"), mapa.get("pol"),
+					mapa.get("datum"), mapa.get("uloga"), 0, new TipKupca("Nema Rank", 0, 0));
+			//Korisnik k = g.fromJson(req.body(), Korisnik.class);
+			ArrayList<Korisnik> listaKorisnika = KorisnikDAO.getListaKorisnika();
+			listaKorisnika.add(k);
+			
+			Input o = new Input("data/korisnici.txt");
+			o.snimiKorisnike(listaKorisnika);
+			
 			res.status(200);
 			return g.toJson(k);
+				
+			
 		});
 		post("/regManifestacije", (req, res) -> {
 			@SuppressWarnings("unchecked")
