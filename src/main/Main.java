@@ -90,6 +90,7 @@ public class Main {
 			o.snimiKorisnike(listaKorisnika);
 			
 			res.status(200);
+			
 			return g.toJson(k);
 				
 			
