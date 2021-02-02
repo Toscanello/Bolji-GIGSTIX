@@ -15,11 +15,8 @@ Vue.component("logout",{
         },
         created(){
            
-            localStorage.removeItem('korisnik')	
-            window.location.replace('/')
-            axios
-            .then(response => {
-                this.$router.push('/login')
-            })
+            localStorage.removeItem('korisnik')
+            this.$router.push("/home-page")
+            window.location.reload()
         }
 });

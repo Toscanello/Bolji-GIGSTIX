@@ -19,6 +19,5 @@ Vue.component("prikazmanifestacije",{
     `,
     mounted(){
         this.m=JSON.parse(localStorage.getItem('manif'))
-        console.log(this.m)
     }
 })

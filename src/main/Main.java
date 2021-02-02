@@ -131,5 +131,17 @@ public class Main {
 			
 			return "Succ";
 		});
+		
+		get("/rezervisi",(req,res)->{
+			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
+			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(mapa.get("manifestacija"));
+			Kupac k = (Kupac) KorisnikDAO.getKorisnikByUsername(mapa.get("korisnik"));
+			
+			Integer kartaReg;
+			Integer kartaVip;
+			Integer kartaFun;
+			
+			return "";
+		});
 	}
 }

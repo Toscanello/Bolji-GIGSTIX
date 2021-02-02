@@ -9,6 +9,7 @@ const RegistracijaManifestacije = {template:'<registracijamanifestacije></regist
 const PrikazManifestacije = {template:'<prikazmanifestacije></prikazmanifestacije>'}
 const KorisniciPregled = {template:'<korisnicipregled></korisnicipregled>'}
 const Logout = {template:'<logout></logout>'}
+const Rezervacija = {template:'<rezervacija></rezervacija>'}
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -19,7 +20,8 @@ const router = new VueRouter({
 		{path:'/regManifestacije',component: RegistracijaManifestacije},
 		{path:'/prikazManifestacije',component: PrikazManifestacije},
 		{path:'/korisniciPregled',component: KorisniciPregled},
-		{path:'/logout',component: Logout}
+		{path:'/logout',component: Logout},
+		{path:'/rezervacija',component:Rezervacija}
 		
 	]
 });

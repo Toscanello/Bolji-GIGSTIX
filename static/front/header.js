@@ -1,7 +1,7 @@
 Vue.component("header-comp",{
     data: function(){
         return{
-            korisnik:""
+            korisnik:null
         }
     },
 
@@ -18,41 +18,47 @@ Vue.component("header-comp",{
                     <li class="nav-item active">
                         <a class="nav-link" aria-current="page" href="/#/home-page">Home</a>
                     </li>
-                    <div v-if="korisnik===''">
+                    <div v-if="(korisnik===null)">
                         <li class="nav-item">
                             <a class="nav-link" href="/#/login">Prijavi se</a>
                         </li>
                     </div>
-                    <div v-if="korisnik===''">
+                    <div v-if="(korisnik===null)">
                         <li class="nav-item">
                             <a class="nav-link" href="/#/registruj">Registruj se</a>
                         </li>
                     </div>
-                    <div v-if="(korisnik.uloga==='Kupac')||(korisnik.uloga==='Prodavac')">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/#/edit">Profil</a>
-                        </li>
+                    <div v-if="(korisnik!==null)">
+                        <div v-if="(korisnik.uloga==='Kupac')||(korisnik.uloga==='Prodavac')">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/#/edit">Profil</a>
+                            </li>
+                        </div>
                     </div>
-                    <div v-if="(korisnik.uloga==='Administrator')">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/#/registrujProdavca">Registruj prodavca</a>
-                        </li>
+                    <div v-if="(korisnik!==null)">
+                        <div v-if="(korisnik.uloga==='Administrator')">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/#/registrujProdavca">Registruj prodavca</a>
+                            </li>
+                        </div>
                     </div>
-                    <div v-if="(korisnik.uloga==='Administrator')">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/#/korisniciPregled">Pregled korisnika</a>
-                        </li>
+                    <div v-if="(korisnik!==null)">
+                        <div v-if="(korisnik.uloga==='Administrator')">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/#/korisniciPregled">Pregled korisnika</a>
+                            </li>
+                        </div>
                     </div>
-                    <div v-if="(korisnik !=='')">
+                    <div v-if="(korisnik !==null)">
                         <li class="nav-item">
                             <p>Dobro dosli {{korisnik.ime}}</p>
                         </li>
                     </div>
-
-                    <li class="nav-item">
-                            <a class="nav-link" href="/#/logout">Logout</a>
-                    </li>
-
+                    <div v-if="(korisnik !== null)">
+                        <li class="nav-item">
+                                <a class="nav-link" href="/#/logout">Logout</a>
+                        </li>
+                    </div>
                 </ul>
             </div>
         </div>
@@ -60,6 +66,5 @@ Vue.component("header-comp",{
     `,
     mounted(){
         this.korisnik=JSON.parse(localStorage.getItem('korisnik'))
-        
     }
 })
