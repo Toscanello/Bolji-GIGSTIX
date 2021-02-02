@@ -157,6 +157,7 @@ public class Main {
 				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), 4*m.getCena(), k, "rezervisana", "fun");
 				KartaDAO.dodajKartu(karta);
 			}
+			m.setBrojMesta((int) (m.getBrojMesta()-kartaReg-kartaVip-kartaFun));
 			
 			return "";
 		});
