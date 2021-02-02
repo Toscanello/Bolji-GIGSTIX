@@ -18,10 +18,12 @@ import java.util.HashMap;
 
 import com.google.gson.Gson;
 
+import DAO.KartaDAO;
 import DAO.KorisnikDAO;
 import DAO.ManifestacijeDAO;
 import io.Input;
 import model.Adresa;
+import model.Karta;
 import model.Korisnik;
 import model.Kupac;
 import model.Lokacija;
@@ -132,14 +134,29 @@ public class Main {
 			return "Succ";
 		});
 		
-		get("/rezervisi",(req,res)->{
-			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
-			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(mapa.get("manifestacija"));
-			Kupac k = (Kupac) KorisnikDAO.getKorisnikByUsername(mapa.get("korisnik"));
-			
-			Integer kartaReg;
-			Integer kartaVip;
-			Integer kartaFun;
+		post("/rezervisi",(req,res)->{
+			HashMap<String, Object> mapa = g.fromJson(req.body(), HashMap.class);
+			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(mapa.get("manifestacija").toString());
+			Kupac k = (Kupac) KorisnikDAO.getKorisnikByUsername(mapa.get("korisnik").toString());
+			Double kartaReg = Double.parseDouble(mapa.get("kartaReg").toString());
+			Double kartaVip = Double.parseDouble(mapa.get("kartaVip").toString());
+			Double kartaFun = Double.parseDouble(mapa.get("kartaFun").toString());
+			if((kartaReg+kartaVip+kartaFun)>4.0) {
+				res.status(400);
+				return "Error";
+			}
+			for(int i=0;i<kartaReg;i++) {
+				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), m.getCena(), k, "rezervisana", "regular");
+				KartaDAO.dodajKartu(karta);
+			}
+			for(int i=0;i<kartaVip;i++) {
+				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), 2*m.getCena(), k, "rezervisana", "vip");
+				KartaDAO.dodajKartu(karta);
+			}
+			for(int i=0;i<kartaFun;i++) {
+				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), 4*m.getCena(), k, "rezervisana", "fun");
+				KartaDAO.dodajKartu(karta);
+			}
 			
 			return "";
 		});

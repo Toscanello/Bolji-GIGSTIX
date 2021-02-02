@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import DAO.KorisnikDAO;
@@ -12,13 +13,13 @@ import DAO.ManifestacijeDAO;
 public class Karta {
 	private String id;
 	private Manifestacija manifestacija;
-	private Date datum;
+	private LocalDateTime datum;
 	private Double cena;
 	private Kupac kupac;
 	private String status; // rezervisana odustanak
 	private String tip; // vip regular fan pit
 
-	public Karta(String id, Manifestacija manifestacija, Date datum, Double cena, Kupac kupac, String status,
+	public Karta(String id, Manifestacija manifestacija, LocalDateTime datum, Double cena, Kupac kupac, String status,
 			String tip) {
 		super();
 		this.id = id;
@@ -46,11 +47,11 @@ public class Karta {
 		this.manifestacija = manifestacija;
 	}
 
-	public Date getDatum() {
+	public LocalDateTime getDatum() {
 		return datum;
 	}
 
-	public void setDatum(Date datum) {
+	public void setDatum(LocalDateTime datum) {
 		this.datum = datum;
 	}
 
@@ -94,12 +95,7 @@ public class Karta {
 		ManifestacijeDAO.loadManifestacije();
 		Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(manif);
 		
-		Date datum = null;
-		try {
-			datum = new SimpleDateFormat("dd.MM.yyyy").parse(tokeni[2]);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}  
+		LocalDateTime datum = LocalDateTime.parse(tokeni[3]);
 		
 		Double cena = Double.valueOf(tokeni[3]);
 		//String username

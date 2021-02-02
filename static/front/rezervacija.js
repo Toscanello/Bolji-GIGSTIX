@@ -5,7 +5,7 @@ Vue.component("rezervacija",{
             korisnik:"",
             kartaReg:0,
             kartaVip:0,
-            kartaFan:0
+            kartaFun:0
         }
     },
     template:`
@@ -26,7 +26,7 @@ Vue.component("rezervacija",{
                 <input type="number" v-model="kartaVip" min="0" max="4" />
             
                 <label>Fan pit karte</label>
-                <input type="number" v-model="kartaFan" min="0" max="4" />  
+                <input type="number" v-model="kartaFun" min="0" max="4" />  
             
                 <button type= "submit">Rezervisi</button>
             </form>
@@ -44,12 +44,18 @@ Vue.component("rezervacija",{
                 korisnik:this.korisnik.username,
                 kartaReg:this.kartaReg,
                 kartaVip:this.kartaVip,
-                kartaFan:this.kartaFan
+                kartaFun:this.kartaFun
             })
             .then(response=>{
-                if(response.data=="Error"){
-                    console.log("error");
-                }
+                console.log("super")
+                alert("Yeah")
+                this.$router.push('/home-page')
+            })
+            .catch(error=>{
+                console.log("greska")
+                alert("Ne mozete naaruciti vise od 4 karte")
+                window.location.reload()
+
             })
         }
     }
