@@ -161,5 +161,19 @@ public class Main {
 			
 			return "";
 		});
+		
+		post("/edit",(req,res)->{
+			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
+			Korisnik k = KorisnikDAO.getKorisnikByUsername(mapa.get("username"));
+			k.setIme(mapa.get("ime"));
+			k.setPassword( mapa.get("password"));
+			k.setPrezime(mapa.get("prezime"));
+			k.setPol(mapa.get("pol"));
+			k.setDatum(mapa.get("datum"));
+			
+			Input o = new Input("data/korisnici.txt");
+			o.snimiKorisnike(KorisnikDAO.listaKorisnika);
+			return "OK";
+		});
 	}
 }
