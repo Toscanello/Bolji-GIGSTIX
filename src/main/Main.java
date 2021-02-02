@@ -28,6 +28,7 @@ import model.Korisnik;
 import model.Kupac;
 import model.Lokacija;
 import model.Manifestacija;
+import model.Prodavac;
 import model.TipKupca;
 
 public class Main {
@@ -39,15 +40,6 @@ public class Main {
 		KorisnikDAO.loadKorisnike();
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
 		after((req, res) -> res.type("application/json"));
-		ManifestacijeDAO.dodajManifestaciju(new Manifestacija("koncert Zdravka Colica", "koncert", 250,
-				LocalDateTime.parse("2007-12-03T10:15:30."), 2000.0, "aktivan",
-				new Lokacija(10.0, 10.0, new Adresa("4. juli", 27, "Zrenjanin", 23000)), "zdravko"));
-		ManifestacijeDAO.dodajManifestaciju(new Manifestacija("koncert Zdravka Colica", "koncert", 250,
-				LocalDateTime.parse("2009-12-03T10:15:30."), 2000.0, "aktivan",
-				new Lokacija(10.0, 10.0, new Adresa("4. juli", 27, "Zrenjanin", 23000)), "zdravko"));
-		ManifestacijeDAO.dodajManifestaciju(new Manifestacija("koncert Zdravka Colica", "koncert", 250,
-				LocalDateTime.parse("2008-12-03T10:15:30."), 2000.0, "aktivan",
-				new Lokacija(10.0, 10.0, new Adresa("4. juli", 27, "Zrenjanin", 23000)), "zdravko"));
 		get("/test", (req, res) -> {
 			return "Works";
 		});
@@ -108,9 +100,20 @@ public class Main {
 					LocalDateTime.parse(mapa.get("datum"), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
 					Double.parseDouble(mapa.get("cena")), mapa.get("status"), lo, "zdravko");// slika
 			ManifestacijeDAO.dodajManifestaciju(m);
+			Prodavac p = (Prodavac) KorisnikDAO.getKorisnikByUsername(mapa.get("korisnik"));
+			p.dodajManifestaciju(m);
 			Input o = new Input("data/manifestacije.txt");
 			o.snimiManifestacije(ManifestacijeDAO.getListaManifestacija());
 			return ":D";
+		});
+		
+		post("/aktiviraj/:id",(req,res)->{
+			String naziv = req.params(":id");
+			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(naziv);
+			m.setStatus("aktivan");
+			Input o = new Input("data/manifestacije.txt");
+			o.snimiManifestacije(ManifestacijeDAO.getListaManifestacija());
+			return "OK";
 		});
 
 		get("/manifestacije/getAll", (req, res) -> {

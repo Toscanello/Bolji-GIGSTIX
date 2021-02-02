@@ -7,7 +7,8 @@ Vue.component("registracijamanifestacije",{
             datum:"",
             cena:"",
             status:"",
-            lokacija:""
+            lokacija:"",
+            korisnik:""
         }
     },
 
@@ -41,7 +42,9 @@ Vue.component("registracijamanifestacije",{
                 <button type = "submit">Dodaj</button>
             </div>
         </form>
-    `,
+    `,mounted(){
+        this.korisnik=JSON.parse(localStorage.getItem('korisnik'))
+    },
     methods:{
         submitForm:function(){
             const manif = {
@@ -51,12 +54,12 @@ Vue.component("registracijamanifestacije",{
                     datum: this.datum,
                     cena: this.cena,
                     status: "neaktivan",
-                    lokacija: this.lokacija
+                    lokacija: this.lokacija,
+                    korisnik: this.korisnik.username
             }
             axios
             .post('/regManifestacije', manif)
             .then(response=>{
-                console.log(response.data)
                 this.$router.push('/home-page')
             })
         }
