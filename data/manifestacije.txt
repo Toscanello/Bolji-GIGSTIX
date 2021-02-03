@@ -1,7 +1,5 @@
-manif,koncert,46545,2020-12-12T15:45,123123.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
-6536,642,62642,2020-10-10T10:55,431241.0,neaktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
-gdsga,dfasfa,432,2020-10-10T10:33,4321.0,neaktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
-koncert Zdravka Colica,koncert,250,2009-12-03T10:15:30,2000.0,aktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko
+manif,koncert,46519,2021-12-12T15:45,123123.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
+koncert Zdravka Colica,koncert,231,2009-12-03T10:15:30,2000.0,aktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko
 koncert Zdravka Colica,koncert,250,2008-12-03T10:15:30,2000.0,aktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko
 koncert Zdravka Colica,koncert,250,2007-12-03T10:15:30,2000.0,neaktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko
 koncert Zdravka Colica,koncert,250,2007-12-03T10:15:30,2000.0,aktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko
