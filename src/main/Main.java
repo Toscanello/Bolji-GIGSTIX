@@ -148,21 +148,43 @@ public class Main {
 				res.status(400);
 				return "Error";
 			}
+			Integer brojBodova = 0;
 			for(int i=0;i<kartaReg;i++) {
 				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), m.getCena(), k, "rezervisana", "regular");
+				brojBodova += (int) (karta.getCena()/1000*133);
 				KartaDAO.dodajKartu(karta);
 			}
 			for(int i=0;i<kartaVip;i++) {
 				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), 2*m.getCena(), k, "rezervisana", "vip");
+				brojBodova +=(int) (karta.getCena()/1000*133);
 				KartaDAO.dodajKartu(karta);
 			}
 			for(int i=0;i<kartaFun;i++) {
 				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), 4*m.getCena(), k, "rezervisana", "fun");
+				brojBodova +=(int) (karta.getCena()/1000*133);
 				KartaDAO.dodajKartu(karta);
 			}
-			m.setBrojMesta((int) (m.getBrojMesta()-kartaReg-kartaVip-kartaFun));
+			k.setBrojBodova(k.getBrojBodova()+brojBodova);
+			if(k.getBrojBodova()>3000) {
+				if(k.getBrojBodova()>4000) {
+					k.getTip().setImeTipa("Zlatni");
+					k.getTip().setPopust(5);
+				}else {
+					k.getTip().setImeTipa("Bronzani");
+					k.getTip().setPopust(3);
+				}
+					
+			}
+			Double cena= kartaReg*m.getCena()+kartaVip*2*m.getCena()+kartaFun*4*m.getCena();
+			cena = (100-k.getTip().getPopust())/100.0*cena;
 			
-			return "";
+			m.setBrojMesta((int) (m.getBrojMesta()-kartaReg-kartaVip-kartaFun));
+			Input o = new Input("data/manifestacije.txt");
+			o.snimiManifestacije(ManifestacijeDAO.getListaManifestacija());
+			o = new Input("data/korisnici.txt");
+			o.snimiKorisnike(KorisnikDAO.listaKorisnika);
+			
+			return g.toJson(cena);
 		});
 		
 		post("/edit",(req,res)->{

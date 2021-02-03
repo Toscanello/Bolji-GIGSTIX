@@ -47,12 +47,11 @@ Vue.component("rezervacija",{
                 kartaFun:this.kartaFun
             })
             .then(response=>{
-                console.log("super")
-                alert("Yeah")
+                const cena = response.data
+                alert("Ukupno za uplatu:"+cena)
                 this.$router.push('/home-page')
             })
             .catch(error=>{
-                console.log("greska")
                 alert("Ne mozete naaruciti vise od 4 karte")
                 window.location.reload()
 
