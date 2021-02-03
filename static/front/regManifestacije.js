@@ -36,7 +36,7 @@ Vue.component("registracijamanifestacije",{
             </div>
             <div>
                 <label for="lokacija"><b>Lokacija</b></label>
-                <input type="text" v-model="lokacija" placeholder = "Example(44.58,41.25,4.juli,27,Zrenjanin,23000)" required/>
+                <input type="text" v-model="lokacija" placeholder = "Example(44.58,41.25,ulica,broj,grad,postBroj)" required/>
             </div>
             <div>
                 <button type = "submit">Dodaj</button>
@@ -62,6 +62,14 @@ Vue.component("registracijamanifestacije",{
             .then(response=>{
                 this.$router.push('/home-page')
             })
+            .catch(error=>{
+                console.log("Greska.")
+                
+                alert("Neka greska")
+                window.location.reload()
+
+            })
+           
         }
     }
 })

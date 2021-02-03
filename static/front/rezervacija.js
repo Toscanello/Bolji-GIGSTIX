@@ -53,7 +53,7 @@ Vue.component("rezervacija",{
             })
             .catch(error=>{
                 console.log("greska")
-                alert("Ne mozete naaruciti vise od 4 karte")
+                alert("Ne mozete naruciti vise od 4 karte")
                 window.location.reload()
 
             })

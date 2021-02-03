@@ -35,6 +35,12 @@ Vue.component("prijavljivanje",{
 					this.$router.push('/home-page')
 					window.location.reload()
 				})
+				.catch(error=>{
+					console.log("Greska.")	
+					alert("Uneti nevalidni ili nepostojeći parametri, pokušajte ponovo.")
+					window.location.reload()
+	
+				})
 			}
 		},
 });

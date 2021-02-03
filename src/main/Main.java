@@ -44,13 +44,20 @@ public class Main {
 			return "Works";
 		});
 		post("/login", (req, res) -> {
-			Korisnik k = g.fromJson(req.body(), Korisnik.class);
-			if((k=KorisnikDAO.getKorisnikByUsername(k.getUsername()))!=null) {
-				res.status(200);
-				return g.toJson(k);
+			try {
+				Korisnik k = g.fromJson(req.body(), Korisnik.class);
+				if((k=KorisnikDAO.getKorisnikByUsername(k.getUsername()))!=null) {
+					res.status(200);
+					return g.toJson(k);
+				}else {
+					res.status(404);
+					return "Greska";
+				}
+				
+			} catch (Exception e) {
+				
 			}
-			res.status(404);
-			return "Greska";
+			return "Success";
 		});
 		
 		get("/logout", (req, res) -> {
@@ -93,12 +100,25 @@ public class Main {
 			@SuppressWarnings("unchecked")
 			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
 			String[] lokacija = mapa.get("lokacija").toString().split(",");
-			Lokacija lo = new Lokacija(Double.parseDouble(lokacija[0]), Double.parseDouble(lokacija[1]), new Adresa(
-					(lokacija[2]), Integer.parseInt(lokacija[3]), lokacija[4], Integer.parseInt(lokacija[5])));
-			Manifestacija m = new Manifestacija(mapa.get("naziv"), mapa.get("tip"),
-					Integer.parseInt(mapa.get("brojMesta")),
-					LocalDateTime.parse(mapa.get("datum"), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
-					Double.parseDouble(mapa.get("cena")), mapa.get("status"), lo, "zdravko");// slika
+			Lokacija lo;
+			try {
+				lo = new Lokacija(Double.parseDouble(lokacija[0]), Double.parseDouble(lokacija[1]), new Adresa(
+						(lokacija[2]), Integer.parseInt(lokacija[3]), lokacija[4], Integer.parseInt(lokacija[5])));
+			} catch (Exception e) {
+				res.status(400);
+				return "Bad Location";
+			}
+			Manifestacija m;
+			try {
+				m = new Manifestacija(mapa.get("naziv"), mapa.get("tip"),
+						Integer.parseInt(mapa.get("brojMesta")),
+						LocalDateTime.parse(mapa.get("datum"), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+						Double.parseDouble(mapa.get("cena")), mapa.get("status"), lo, "zdravko");// slika
+			} catch (Exception e) {
+				res.status(400);
+				return "Bad Br. Mesta, Datum or Cena";
+			}
+		
 			ManifestacijeDAO.dodajManifestaciju(m);
 			Prodavac p = (Prodavac) KorisnikDAO.getKorisnikByUsername(mapa.get("korisnik"));
 			p.dodajManifestaciju(m);
