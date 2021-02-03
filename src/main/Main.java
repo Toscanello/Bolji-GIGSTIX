@@ -132,6 +132,41 @@ public class Main {
 			return g.toJson(m);
 		});
 		
+		get("/karte/:id",(req,res)->{
+			String naziv = req.params(":id");
+			Kupac k = (Kupac) KorisnikDAO.getKorisnikByUsername(naziv);
+			res.type("application/json");
+			return g.toJson(KartaDAO.getKarteByKupac(k));
+		});
+		
+		post("/otkazi/:id",(req,res)->{
+			String naziv = req.params(":id");
+			Karta k = KartaDAO.getKartaById(naziv);
+			if(k.getDatum().plusDays(7).isAfter(LocalDateTime.now())) {
+				k.setStatus("Otkazana");
+				Integer bodovi = (int) (k.getCena()/1000*133*4);
+				k.getKupac().setBrojBodova(k.getKupac().getBrojBodova()-bodovi);
+				if(k.getKupac().getBrojBodova()<4000) {
+					if(k.getKupac().getBrojBodova()<3000) {
+						k.getKupac().getTip().setImeTipa("Bronzani");
+						k.getKupac().getTip().setPopust(0);
+					}else {
+						k.getKupac().getTip().setImeTipa("Srebrni");
+						k.getKupac().getTip().setPopust(3);
+					}
+				}
+				Input o = new Input("data/korisnici.txt");
+				o.snimiKorisnike(KorisnikDAO.listaKorisnika);
+				
+				k.getManifestacija().setBrojMesta(k.getManifestacija().getBrojMesta()+1);
+				o = new Input("data/manifestacije.txt");
+				o.snimiManifestacije(ManifestacijeDAO.getListaManifestacija());
+				return "OK";
+			}
+			res.status(400);
+			return "Bad";
+		});
+		
 		get("/prikazKorisnika",(req,res)->{
 			
 			return "Succ";
