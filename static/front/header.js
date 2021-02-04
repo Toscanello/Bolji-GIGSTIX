@@ -59,6 +59,13 @@ Vue.component("header-comp",{
                     <div v-if="(korisnik!==null)">
                         <div v-if="(korisnik.uloga==='Administrator')">
                             <li class="nav-item">
+                                <a class="nav-link" href="/#/pregledKomentara">Pregled komentara</a>
+                            </li>
+                        </div>
+                    </div>
+                    <div v-if="(korisnik!==null)">
+                        <div v-if="(korisnik.uloga==='Administrator')">
+                            <li class="nav-item">
                                 <a class="nav-link" href="/#/korisniciPregled">Pregled korisnika</a>
                             </li>
                         </div>

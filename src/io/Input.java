@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import model.Administrator;
 import model.Karta;
+import model.Komentar;
 import model.Korisnik;
 import model.Kupac;
 import model.Manifestacija;
@@ -84,6 +85,27 @@ public class Input extends OutputStreamWriter {
 			for (Manifestacija k : lista) {
 				
 				string = Manifestacija.toFileString(k);
+				
+				try {
+					this.write(string + "\n");
+					this.flush();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+					
+		}
+		
+	//******************************************************
+	
+	
+		public void snimiKomentare(ArrayList<Komentar> lista) throws IOException {
+			
+			String string = "";
+			
+			for (Komentar k : lista) {
+				
+				string = Komentar.toFileString(k);
 				
 				try {
 					this.write(string + "\n");

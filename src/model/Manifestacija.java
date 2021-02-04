@@ -1,7 +1,8 @@
 package model;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Manifestacija implements Comparable<Manifestacija> {
 	private String naziv;
@@ -12,6 +13,7 @@ public class Manifestacija implements Comparable<Manifestacija> {
 	private String status; // aktivan neaktivan
 	private Lokacija lokacija;
 	private String slika; // proveriti kako izgleda slika
+	private List<Komentar> komentari;
 
 	public Manifestacija(String naziv, String tip, Integer brojMesta, LocalDateTime datum, Double cena,
 			String status, Lokacija lokacija, String slika) {
@@ -24,6 +26,7 @@ public class Manifestacija implements Comparable<Manifestacija> {
 		this.status = status;
 		this.lokacija = lokacija;
 		this.slika = slika;
+		this.komentari=new ArrayList<Komentar>();
 	}
 
 	public String getNaziv() {
@@ -93,10 +96,9 @@ public class Manifestacija implements Comparable<Manifestacija> {
 	public String getStatus() {
 		return status;
 	}
-
-	//
-	public static void returnManifestaciju(Integer id) {
-
+	
+	public void dodajKomentar(Komentar k) {
+		this.komentari.add(k);
 	}
 
 	public static Manifestacija parseString(String line) {

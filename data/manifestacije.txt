@@ -1,8 +1,8 @@
-manif,koncert,46519,2021-12-12T15:45,123123.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
-koncert Zdravka Colica,koncert,231,2009-12-03T10:15:30,2000.0,aktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko
+manif,koncert,46515,2021-12-12T15:45,123123.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
+koncert Zdravka Colica,koncert,217,2009-12-03T10:15:30,2000.0,aktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko
 koncert Zdravka Colica,koncert,250,2008-12-03T10:15:30,2000.0,aktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko
 koncert Zdravka Colica,koncert,250,2007-12-03T10:15:30,2000.0,neaktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko
 koncert Zdravka Colica,koncert,250,2007-12-03T10:15:30,2000.0,aktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko
 koncert Zdravka Colica,koncert,250,2007-12-03T10:15:30,2000.0,aktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko
 asd,asd,1234,1212-12-12T12:12,12342.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
-toska,koncert,123,1200-12-12T11:11,123.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
+toska,koncert,121,1200-12-12T11:11,123.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko

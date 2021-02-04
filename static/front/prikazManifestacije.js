@@ -1,7 +1,9 @@
 Vue.component("prikazmanifestacije",{
     data: function(){
         return{
-          m:""
+          m:"",
+          korisnik:"",
+          komentari:null
         }
     },
 
@@ -15,9 +17,36 @@ Vue.component("prikazmanifestacije",{
                 {{m.lokacija.adresa.mesto}} {{m.lokacija.adresa.postBroj}}<br/>Broj mesta: {{m.brojMesta}}<br/>
                 Cena karte je: {{m.cena}}</p>
             </div>
+            <div>
+            <komentarisanje @clicked="onCommentClick"> </komentarisanje>
+            </div>
+            <div v-for="k in komentari">
+                <div v-if="k.aktivan===true">
+                    <p>{{k.tekst}}</br></p>
+                </div>
+            </div>
         </div>
     `,
     mounted(){
         this.m=JSON.parse(localStorage.getItem('manif'))
+        this.korisnik=JSON.parse(localStorage.getItem('korisnik'))
+        axios
+        .get(`komentari/${this.m.naziv}`)
+        .then(response=>{
+            console.log(response.data)
+            this.komentari=response.data})
+    },
+    methods:{
+        onCommentClick: function(kom){
+            console.log(kom)
+            axios
+            .post("/komentarisi", {
+                komentar:kom.komentar,
+                ocena:kom.ocena,
+                manifestacija:this.m.naziv,
+                korisnik:this.korisnik.username
+            })
+            .then(window.location.reload())
+        }
     }
 })
