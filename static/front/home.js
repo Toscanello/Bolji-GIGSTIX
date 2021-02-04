@@ -8,6 +8,9 @@ Vue.component("home-page",{
     },
     template: `
     <div>
+        <div>
+            <manifest-search @clicked="onSearchClick"></manifest-search>
+        </div>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" style="margin-left: 50px" >
             <div v-for = "m in manifestacije" v-if="((korisnik===null && m.status==='aktivan')||(uloga==='Administrator')||(uloga!=='Administrator' && m.status==='aktivan'))">
                 <div class="row">
@@ -56,6 +59,14 @@ Vue.component("home-page",{
             .post(`aktiviraj/${m.naziv}`)
             .then(response=>{
                 window.location.reload()
+            })
+        },
+        onSearchClick:function(search){
+            console.log(search)
+            axios
+            .post('/pretragaManif',search)
+            .then(response=>{
+                this.manifestacije= response.data
             })
         }
     },

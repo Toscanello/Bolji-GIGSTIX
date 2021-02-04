@@ -10,11 +10,13 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 
@@ -46,32 +48,32 @@ public class Main {
 		post("/login", (req, res) -> {
 			try {
 				Korisnik k = g.fromJson(req.body(), Korisnik.class);
-				if((k=KorisnikDAO.getKorisnikByUsername(k.getUsername()))!=null) {
+				if ((k = KorisnikDAO.getKorisnikByUsername(k.getUsername())) != null) {
 					res.status(200);
 					return g.toJson(k);
-				}else {
+				} else {
 					res.status(404);
 					return "Greska";
 				}
-				
+
 			} catch (Exception e) {
-				
+
 			}
 			return "Success";
 		});
-		
+
 		get("/logout", (req, res) -> {
 			return null;
 		});
-		
+
 		post("/registruj", (req, res) -> {
-			
+
 			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
-			if(!mapa.get("pol").equals("MUSKI") && !mapa.get("pol").equals("ZENSKI")) {
+			if (!mapa.get("pol").equals("MUSKI") && !mapa.get("pol").equals("ZENSKI")) {
 				res.status(404);
 				return "Error.";
 			}
-			
+
 			String datum = mapa.get("datum");
 			Date dateTest = null;
 			try {
@@ -80,21 +82,20 @@ public class Main {
 				res.status(404);
 				return "Error.";
 			}
-			
-			Kupac k = new Kupac(mapa.get("username"), mapa.get("password"), mapa.get("ime"), mapa.get("prezime"), mapa.get("pol"),
-					mapa.get("datum"), mapa.get("uloga"), 0, new TipKupca("Nema Rank", 0, 0));
-			//Korisnik k = g.fromJson(req.body(), Korisnik.class);
+
+			Kupac k = new Kupac(mapa.get("username"), mapa.get("password"), mapa.get("ime"), mapa.get("prezime"),
+					mapa.get("pol"), mapa.get("datum"), mapa.get("uloga"), 0, new TipKupca("Nema Rank", 0, 0));
+			// Korisnik k = g.fromJson(req.body(), Korisnik.class);
 			ArrayList<Korisnik> listaKorisnika = KorisnikDAO.getListaKorisnika();
 			listaKorisnika.add(k);
-			
+
 			Input o = new Input("data/korisnici.txt");
 			o.snimiKorisnike(listaKorisnika);
-			
+
 			res.status(200);
-			
+
 			return g.toJson(k);
-				
-			
+
 		});
 		post("/regManifestacije", (req, res) -> {
 			@SuppressWarnings("unchecked")
@@ -110,15 +111,14 @@ public class Main {
 			}
 			Manifestacija m;
 			try {
-				m = new Manifestacija(mapa.get("naziv"), mapa.get("tip"),
-						Integer.parseInt(mapa.get("brojMesta")),
+				m = new Manifestacija(mapa.get("naziv"), mapa.get("tip"), Integer.parseInt(mapa.get("brojMesta")),
 						LocalDateTime.parse(mapa.get("datum"), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
 						Double.parseDouble(mapa.get("cena")), mapa.get("status"), lo, "zdravko");// slika
 			} catch (Exception e) {
 				res.status(400);
 				return "Bad Br. Mesta, Datum or Cena";
 			}
-		
+
 			ManifestacijeDAO.dodajManifestaciju(m);
 			Prodavac p = (Prodavac) KorisnikDAO.getKorisnikByUsername(mapa.get("korisnik"));
 			p.dodajManifestaciju(m);
@@ -126,8 +126,8 @@ public class Main {
 			o.snimiManifestacije(ManifestacijeDAO.getListaManifestacija());
 			return ":D";
 		});
-		
-		post("/aktiviraj/:id",(req,res)->{
+
+		post("/aktiviraj/:id", (req, res) -> {
 			String naziv = req.params(":id");
 			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(naziv);
 			m.setStatus("aktivan");
@@ -140,45 +140,90 @@ public class Main {
 			res.type("application/json");
 			return g.toJson(ManifestacijeDAO.listaManifestacija);
 		});
-		
+
+		post("/pretragaManif", (req, res) -> {
+			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
+
+			String naziv = mapa.get("naziv");
+			String cenaOd = mapa.get("cena_od");
+			String cenaDo = mapa.get("cena_do");
+			String datumOd = mapa.get("datum_od");
+			String datumDo = mapa.get("datum_do");
+
+			ArrayList<Manifestacija> manif = ManifestacijeDAO.listaManifestacija;
+
+			if (naziv.equals("") && cenaOd.equals("") && cenaDo.equals("") && datumOd.equals("") && datumDo.equals(""))
+				return g.toJson(ManifestacijeDAO.listaManifestacija);
+
+			if (!naziv.equals("")) {
+				manif = (ArrayList<Manifestacija>) manif.stream().filter(m -> m.getNaziv().contains(naziv))
+						.collect(Collectors.toList());
+			}
+			if (!cenaOd.equals("")) {
+				Double cena = Double.parseDouble(cenaOd);
+				manif = (ArrayList<Manifestacija>) manif.stream().filter(m -> m.getCena() >= cena)
+						.collect(Collectors.toList());
+			}
+			if (!cenaDo.equals("")) {
+				Double cena = Double.parseDouble(cenaDo);
+				manif = (ArrayList<Manifestacija>) manif.stream().filter(m -> m.getCena() <= cena)
+						.collect(Collectors.toList());
+			}
+			if (!datumOd.equals("")) {
+				LocalDateTime datum = LocalDate.parse(datumOd, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+						.atStartOfDay();
+				manif = (ArrayList<Manifestacija>) manif.stream().filter(m -> m.getDatum().isAfter(datum))
+						.collect(Collectors.toList());
+			}
+			if (!datumDo.equals("")) {
+				LocalDateTime datum = LocalDate.parse(datumDo, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+						.atStartOfDay();
+				manif = (ArrayList<Manifestacija>) manif.stream().filter(m -> m.getDatum().isAfter(datum))
+						.collect(Collectors.toList());
+			}
+
+			res.type("application/json");
+			return g.toJson(manif);
+		});
+
 		get("/korisnici/getAll", (req, res) -> {
 			res.type("application/json");
 			return g.toJson(KorisnikDAO.listaKorisnika);
 		});
-		
-		get("/prikazManif/:id",(req,res)->{
+
+		get("/prikazManif/:id", (req, res) -> {
 			String naziv = req.params(":id");
 			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(naziv);
 			return g.toJson(m);
 		});
-		
-		get("/karte/:id",(req,res)->{
+
+		get("/karte/:id", (req, res) -> {
 			String naziv = req.params(":id");
 			Kupac k = (Kupac) KorisnikDAO.getKorisnikByUsername(naziv);
 			res.type("application/json");
 			return g.toJson(KartaDAO.getKarteByKupac(k));
 		});
-		
-		post("/otkazi/:id",(req,res)->{
+
+		post("/otkazi/:id", (req, res) -> {
 			String naziv = req.params(":id");
 			Karta k = KartaDAO.getKartaById(naziv);
-			if(k.getDatum().plusDays(7).isAfter(LocalDateTime.now())) {
+			if (k.getDatum().plusDays(7).isAfter(LocalDateTime.now())) {
 				k.setStatus("Otkazana");
-				Integer bodovi = (int) (k.getCena()/1000*133*4);
-				k.getKupac().setBrojBodova(k.getKupac().getBrojBodova()-bodovi);
-				if(k.getKupac().getBrojBodova()<4000) {
-					if(k.getKupac().getBrojBodova()<3000) {
+				Integer bodovi = (int) (k.getCena() / 1000 * 133 * 4);
+				k.getKupac().setBrojBodova(k.getKupac().getBrojBodova() - bodovi);
+				if (k.getKupac().getBrojBodova() < 4000) {
+					if (k.getKupac().getBrojBodova() < 3000) {
 						k.getKupac().getTip().setImeTipa("Bronzani");
 						k.getKupac().getTip().setPopust(0);
-					}else {
+					} else {
 						k.getKupac().getTip().setImeTipa("Srebrni");
 						k.getKupac().getTip().setPopust(3);
 					}
 				}
 				Input o = new Input("data/korisnici.txt");
 				o.snimiKorisnike(KorisnikDAO.listaKorisnika);
-				
-				k.getManifestacija().setBrojMesta(k.getManifestacija().getBrojMesta()+1);
+
+				k.getManifestacija().setBrojMesta(k.getManifestacija().getBrojMesta() + 1);
 				o = new Input("data/manifestacije.txt");
 				o.snimiManifestacije(ManifestacijeDAO.getListaManifestacija());
 				return "OK";
@@ -186,71 +231,74 @@ public class Main {
 			res.status(400);
 			return "Bad";
 		});
-		
-		get("/prikazKorisnika",(req,res)->{
-			
+
+		get("/prikazKorisnika", (req, res) -> {
+
 			return "Succ";
 		});
-		
-		post("/rezervisi",(req,res)->{
+
+		post("/rezervisi", (req, res) -> {
 			HashMap<String, Object> mapa = g.fromJson(req.body(), HashMap.class);
 			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(mapa.get("manifestacija").toString());
 			Kupac k = (Kupac) KorisnikDAO.getKorisnikByUsername(mapa.get("korisnik").toString());
 			Double kartaReg = Double.parseDouble(mapa.get("kartaReg").toString());
 			Double kartaVip = Double.parseDouble(mapa.get("kartaVip").toString());
 			Double kartaFun = Double.parseDouble(mapa.get("kartaFun").toString());
-			if((kartaReg+kartaVip+kartaFun)>4.0) {
+			if ((kartaReg + kartaVip + kartaFun) > 4.0) {
 				res.status(400);
 				return "Error";
 			}
 			Integer brojBodova = 0;
-			for(int i=0;i<kartaReg;i++) {
-				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), m.getCena(), k, "rezervisana", "regular");
-				brojBodova += (int) (karta.getCena()/1000*133);
+			for (int i = 0; i < kartaReg; i++) {
+				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), m.getCena(), k, "rezervisana",
+						"regular");
+				brojBodova += (int) (karta.getCena() / 1000 * 133);
 				KartaDAO.dodajKartu(karta);
 			}
-			for(int i=0;i<kartaVip;i++) {
-				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), 2*m.getCena(), k, "rezervisana", "vip");
-				brojBodova +=(int) (karta.getCena()/1000*133);
+			for (int i = 0; i < kartaVip; i++) {
+				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), 2 * m.getCena(), k, "rezervisana",
+						"vip");
+				brojBodova += (int) (karta.getCena() / 1000 * 133);
 				KartaDAO.dodajKartu(karta);
 			}
-			for(int i=0;i<kartaFun;i++) {
-				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), 4*m.getCena(), k, "rezervisana", "fun");
-				brojBodova +=(int) (karta.getCena()/1000*133);
+			for (int i = 0; i < kartaFun; i++) {
+				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), 4 * m.getCena(), k, "rezervisana",
+						"fun");
+				brojBodova += (int) (karta.getCena() / 1000 * 133);
 				KartaDAO.dodajKartu(karta);
 			}
-			k.setBrojBodova(k.getBrojBodova()+brojBodova);
-			if(k.getBrojBodova()>3000) {
-				if(k.getBrojBodova()>4000) {
+			k.setBrojBodova(k.getBrojBodova() + brojBodova);
+			if (k.getBrojBodova() > 3000) {
+				if (k.getBrojBodova() > 4000) {
 					k.getTip().setImeTipa("Zlatni");
 					k.getTip().setPopust(5);
-				}else {
+				} else {
 					k.getTip().setImeTipa("Bronzani");
 					k.getTip().setPopust(3);
 				}
-					
+
 			}
-			Double cena= kartaReg*m.getCena()+kartaVip*2*m.getCena()+kartaFun*4*m.getCena();
-			cena = (100-k.getTip().getPopust())/100.0*cena;
-			
-			m.setBrojMesta((int) (m.getBrojMesta()-kartaReg-kartaVip-kartaFun));
+			Double cena = kartaReg * m.getCena() + kartaVip * 2 * m.getCena() + kartaFun * 4 * m.getCena();
+			cena = (100 - k.getTip().getPopust()) / 100.0 * cena;
+
+			m.setBrojMesta((int) (m.getBrojMesta() - kartaReg - kartaVip - kartaFun));
 			Input o = new Input("data/manifestacije.txt");
 			o.snimiManifestacije(ManifestacijeDAO.getListaManifestacija());
 			o = new Input("data/korisnici.txt");
 			o.snimiKorisnike(KorisnikDAO.listaKorisnika);
-			
+
 			return g.toJson(cena);
 		});
-		
-		post("/edit",(req,res)->{
+
+		post("/edit", (req, res) -> {
 			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
 			Korisnik k = KorisnikDAO.getKorisnikByUsername(mapa.get("username"));
 			k.setIme(mapa.get("ime"));
-			k.setPassword( mapa.get("password"));
+			k.setPassword(mapa.get("password"));
 			k.setPrezime(mapa.get("prezime"));
 			k.setPol(mapa.get("pol"));
 			k.setDatum(mapa.get("datum"));
-			
+
 			Input o = new Input("data/korisnici.txt");
 			o.snimiKorisnike(KorisnikDAO.listaKorisnika);
 			return "OK";
