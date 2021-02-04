@@ -21,11 +21,13 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 
 import DAO.KartaDAO;
+import DAO.KomentarDAO;
 import DAO.KorisnikDAO;
 import DAO.ManifestacijeDAO;
 import io.Input;
 import model.Adresa;
 import model.Karta;
+import model.Komentar;
 import model.Korisnik;
 import model.Kupac;
 import model.Lokacija;
@@ -40,6 +42,7 @@ public class Main {
 		Gson g = new Gson();
 		ManifestacijeDAO.loadManifestacije();
 		KorisnikDAO.loadKorisnike();
+		KomentarDAO.loadKomentare();
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
 		after((req, res) -> res.type("application/json"));
 		get("/test", (req, res) -> {
@@ -136,11 +139,130 @@ public class Main {
 			return "OK";
 		});
 
+		post("/pretragaKarte", (req, res) -> {
+			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
+
+			String naziv = mapa.get("manifestacija");
+			String cenaOd = mapa.get("cena_od");
+			String cenaDo = mapa.get("cena_do");
+			String datumOd = mapa.get("datum_od");
+			String datumDo = mapa.get("datum_do");
+
+			ArrayList<Karta> karte = KartaDAO.listaKarata;
+
+			if (naziv.equals("") && cenaOd.equals("") && cenaDo.equals("") && datumOd.equals("") && datumDo.equals(""))
+				return g.toJson(KartaDAO.listaKarata);
+
+			if (!naziv.equals("")) {
+				karte = (ArrayList<Karta>) karte.stream().filter(m -> m.getManifestacija().getNaziv().contains(naziv))
+						.collect(Collectors.toList());
+			}
+			if (!cenaOd.equals("")) {
+				Double cena = Double.parseDouble(cenaOd);
+				karte = (ArrayList<Karta>) karte.stream().filter(m -> m.getCena() >= cena).collect(Collectors.toList());
+			}
+			if (!cenaDo.equals("")) {
+				Double cena = Double.parseDouble(cenaDo);
+				karte = (ArrayList<Karta>) karte.stream().filter(m -> m.getCena() <= cena).collect(Collectors.toList());
+			}
+			if (!datumOd.equals("")) {
+				LocalDateTime datum = LocalDate.parse(datumOd, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+						.atStartOfDay();
+				karte = (ArrayList<Karta>) karte.stream().filter(m -> m.getDatum().isAfter(datum))
+						.collect(Collectors.toList());
+			}
+			if (!datumDo.equals("")) {
+				LocalDateTime datum = LocalDate.parse(datumDo, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+						.atStartOfDay();
+				karte = (ArrayList<Karta>) karte.stream().filter(m -> m.getDatum().isBefore(datum))
+						.collect(Collectors.toList());
+			}
+
+			res.type("application/json");
+			return g.toJson(karte);
+		});
+
+		post("/sortKarte", (req, res) -> {
+			HashMap<String, Boolean> mapa = g.fromJson(req.body(), HashMap.class);
+
+			boolean rast = mapa.get("rast");
+			boolean opad = mapa.get("opad");
+			boolean dat_opad = mapa.get("dat_opad");
+			boolean dat_rast = mapa.get("dat_rast");
+
+			ArrayList<Karta> karte = KartaDAO.listaKarata;
+
+			if (rast) {
+				int n = karte.size();
+				Karta temp = null;
+				for (int i = 0; i < n; i++) {
+					for (int j = 1; j < (n - i); j++) {
+						if (karte.get(j - 1).getManifestacija().getNaziv()
+								.compareTo(karte.get(j).getManifestacija().getNaziv()) > 0) {
+							// swap elements
+							temp = karte.get(j - 1);
+							karte.set(j - 1, karte.get(j));
+							karte.set(j, temp);
+						}
+
+					}
+				}
+			}
+			if (opad) {
+				int n = karte.size();
+				Karta temp = null;
+				for (int i = 0; i < n; i++) {
+					for (int j = 1; j < (n - i); j++) {
+						if (karte.get(j - 1).getManifestacija().getNaziv()
+								.compareTo(karte.get(j).getManifestacija().getNaziv()) < 0) {
+							// swap elements
+							temp = karte.get(j - 1);
+							karte.set(j - 1, karte.get(j));
+							karte.set(j, temp);
+						}
+
+					}
+				}
+			}
+			if (dat_opad) {
+				int n = karte.size();
+				Karta temp = null;
+				for (int i = 0; i < n; i++) {
+					for (int j = 1; j < (n - i); j++) {
+						if (karte.get(j - 1).getDatum().isAfter(karte.get(j).getDatum())) {
+							// swap elements
+							temp = karte.get(j - 1);
+							karte.set(j - 1, karte.get(j));
+							karte.set(j, temp);
+						}
+
+					}
+				}
+			}
+			if (dat_rast) {
+				int n = karte.size();
+				Karta temp = null;
+				for (int i = 0; i < n; i++) {
+					for (int j = 1; j < (n - i); j++) {
+						if (karte.get(j - 1).getDatum().isBefore(karte.get(j).getDatum())) {
+							// swap elements
+							temp = karte.get(j - 1);
+							karte.set(j - 1, karte.get(j));
+							karte.set(j, temp);
+						}
+
+					}
+				}
+			}
+
+			res.type("application/json");
+			return g.toJson(karte);
+		});
+
 		get("/manifestacije/getAll", (req, res) -> {
 			res.type("application/json");
 			return g.toJson(ManifestacijeDAO.listaManifestacija);
 		});
-
 		post("/pretragaManif", (req, res) -> {
 			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
 
@@ -185,7 +307,7 @@ public class Main {
 			res.type("application/json");
 			return g.toJson(manif);
 		});
-
+		
 		get("/korisnici/getAll", (req, res) -> {
 			res.type("application/json");
 			return g.toJson(KorisnikDAO.listaKorisnika);
@@ -207,7 +329,7 @@ public class Main {
 		post("/otkazi/:id", (req, res) -> {
 			String naziv = req.params(":id");
 			Karta k = KartaDAO.getKartaById(naziv);
-			if (k.getDatum().plusDays(7).isAfter(LocalDateTime.now())) {
+			if (k.getDatum().minusDays(7).isAfter(LocalDateTime.now())) {
 				k.setStatus("Otkazana");
 				Integer bodovi = (int) (k.getCena() / 1000 * 133 * 4);
 				k.getKupac().setBrojBodova(k.getKupac().getBrojBodova() - bodovi);
@@ -303,5 +425,46 @@ public class Main {
 			o.snimiKorisnike(KorisnikDAO.listaKorisnika);
 			return "OK";
 		});
+
+		post("/komentarisi", (req, res) -> {
+			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
+			Kupac kup = (Kupac) KorisnikDAO.getKorisnikByUsername(mapa.get("korisnik"));
+			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(mapa.get("manifestacija"));
+
+			Komentar k = new Komentar(kup, m, mapa.get("komentar"), Integer.parseInt(mapa.get("ocena")));
+			m.dodajKomentar(k);
+			KomentarDAO.dodajKomentar(k);
+			Input o = new Input("data/komentari.txt");
+			o.snimiKomentare(KomentarDAO.listaKomentara);
+			return "OK";
+
+		});
+
+		get("/komentari/:id", (req, res) -> {
+			String naziv = req.params(":id");
+			ArrayList<Komentar> komentari = new ArrayList<Komentar>();
+			for (Komentar kom : KomentarDAO.listaKomentara) {
+				if(kom.getManifestacija().getNaziv().equals(naziv))
+					komentari.add(kom);
+			}
+			res.type("application/json");
+			return g.toJson(komentari);
+		});
+		
+		get("/komentari", (req, res) -> {
+			res.type("application/json");
+			System.out.println(KomentarDAO.listaKomentara.size());
+			return g.toJson(KomentarDAO.listaKomentara);
+		});
+		
+		post("/odobri/:id", (req, res) -> {
+			String naziv = req.params(":id");
+			Komentar k = KomentarDAO.getKomentarById(naziv);
+			k.setAktivan(true);
+			Input o = new Input("data/komentari.txt");
+			o.snimiKomentare(KomentarDAO.listaKomentara);
+			return "OK";
+		});
+
 	}
 }

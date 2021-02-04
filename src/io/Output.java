@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import model.Administrator;
 import model.Karta;
+import model.Komentar;
 import model.Korisnik;
 import model.Kupac;
 import model.Manifestacija;
@@ -137,5 +138,33 @@ public class Output extends BufferedReader {
 		
 	
 	}
+	
+	//******************************************************
+
+		public void ucitajKomentare(ArrayList<Komentar> lista) {
+			
+			try {
+				
+				BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("data/komentari.txt"), "UTF-8"));
+				
+				String line = "";
+				
+				try {
+					while((line = br.readLine()) != null) {
+						lista.add(Komentar.parseString(line));
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+			
+			
+		
+		}
 	
 }

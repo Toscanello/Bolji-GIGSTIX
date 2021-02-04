@@ -7,6 +7,9 @@ Vue.component("karte",{
     },
     template:`
         <div>
+            <karta-pretraga @clicked="onPretraga"> </karta-pretraga>
+            <karta-sort @clicked="onSort"> </karta-sort>
+            <karta-filter @clicked="onFilter"> </karta-filter>
             <div v-for="k in karte" style="width:300px">
                 <div style="border:1px solid black">
                     <p>Karta:{{k.id}}- {{k.manifestacija.naziv}}</br>
@@ -15,7 +18,6 @@ Vue.component("karte",{
                     <div>
                         <div class="btn-group">
                             <button type = "button" v-if="k.status==='rezervisana'" v-on:click="otkazi(k)">Otkazi</button>
-                            <button type ="button" v-on:click="komentarisi(k)">Komentar</button> 
                         </div>
                     </div>
                 </div> 
@@ -43,12 +45,23 @@ Vue.component("karte",{
                window.location.reload() 
             })
         },
-        komentarisi:function(k){
+        onPretraga: function(x){
             axios
-            .post(`/komentarisi${k.id}`)
+            .post('/pretragaKarte', x)
             .then(response=>{
-                
+                this.karte = response.data
             })
+        },
+        onSort: function(y){
+            axios
+            .post('/sortKarte', y)
+            .then(response=>{
+                this.karte = response.data
+            })
+        },
+        onFilter: function(z){
+            console.log(z)
         }
+        
     }
 })

@@ -12,6 +12,7 @@ const Logout = {template:'<logout></logout>'}
 const Rezervacija = {template:'<rezervacija></rezervacija>'}
 const Edit = {template:'<edit></edit>'}
 const Karte = {template:'<karte></karte>'}
+const Komentari={template:'<komentari></komentari>'}
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -25,8 +26,8 @@ const router = new VueRouter({
 		{path:'/logout',component: Logout},
 		{path:'/rezervacija',component:Rezervacija},
 		{path:'/edit', component: Edit},
-		{path:'/karte', component: Karte}
-		
+		{path:'/karte', component: Karte},
+		{path:'/pregledKomentara',component: Komentari}
 	]
 });
 
