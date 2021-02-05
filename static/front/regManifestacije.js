@@ -39,7 +39,7 @@ Vue.component("registracijamanifestacije",{
                 <input type="text" v-model="lokacija" placeholder = "Example(44.58,41.25,ulica,broj,grad,postBroj)" required/>
             </div>
             <div>
-                <button type = "submit">Dodaj</button>
+                <button type = "submit" class="btn btn-sm btn-outline-primary">Dodaj</button>
             </div>
         </form>
     `,mounted(){

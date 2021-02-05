@@ -12,15 +12,21 @@ Vue.component("prijavljivanje",{
 	},
 	
 	template:`
-		<form id = "loginForm" method="POST" @submit.prevent = "submitForm">
-			<label for="uname"><b>Username</b></label>
-			<input type="text" v-model="korisnik.username" placeholder="Enter Username" name="uname" required>
-
-			<label for="psw"><b>Password</b></label>
-			<input type="password" v-model="korisnik.password" placeholder="Enter Password" name="psw" required>
-
-			<button type= "submit">Login</button>
-		</form>
+		<div id = "loginForm1" >
+			<form id = "loginForm" method="POST" @submit.prevent = "submitForm">
+				<p>
+					<label for="uname"><b>Username</b></label>
+					<input type="text" v-model="korisnik.username" placeholder="Enter Username" name="uname" required>
+				</p>
+				<p>
+					<label for="psw"><b>Password</b></label>
+					<input type="password" v-model="korisnik.password" placeholder="Enter Password" name="psw" required>
+				</p>
+				<p>
+					<button type= "submit" class="btn btn-sm btn-outline-primary">Login</button>
+				</p>
+			</form>
+		</div>
 	`
 		,
 		methods : {

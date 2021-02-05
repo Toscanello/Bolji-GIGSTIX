@@ -1,1 +1,54 @@
 @charset "utf-8";
+
+.komentar{
+    border: 1px solid lightskyblue;
+    width: 150px;
+    margin: 3px;
+    display: inline-block;
+    
+}
+
+#komentar{
+    font-size: 25px;
+}
+
+#logout{
+    color: indianred;
+}
+
+#korisnik{
+    font-size: 15px;
+    text-align: center;
+    color: grey;
+    margin-top: 10px;
+}
+
+#manifest{
+    border: 1px solid lightskyblue;
+    margin: 3px;
+}
+
+img{
+    float: left;
+    display: inline;
+}
+
+#man{
+    display: inline;
+    vertical-align: top;
+    margin: 0px;
+}
+
+#search{
+    margin-left: 400px;
+}
+
+#search2{
+    margin-left: 400px;
+}
+
+#loginForm1, #registrationForm,#editForm{
+    text-align: center;
+    margin-top: 20%;
+    font-size: 20px;
+}

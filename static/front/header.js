@@ -72,12 +72,12 @@ Vue.component("header-comp",{
                     </div>
                     <div v-if="(korisnik !==null)">
                         <li class="nav-item">
-                            <p>Dobro dosli {{korisnik.ime}}</p>
+                            <p id="korisnik">Dobro dosli {{korisnik.ime}}</p>
                         </li>
                     </div>
                     <div v-if="(korisnik !== null)">
                         <li class="nav-item">
-                                <a class="nav-link" href="/#/logout">Logout</a>
+                                <a id="logout" class="nav-link" href="/#/logout">Logout</a>
                         </li>
                     </div>
                 </ul>

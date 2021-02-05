@@ -6,15 +6,18 @@ Vue.component("komentari",{
     },
     template:`
     <div>
-        <div v-for="k in komentar">
-            <div>
-                <p>
-                    Komentar: {{k.tekst}}
-                    Kupac:{{k.kupac.ime}}
-                </p> 
-                <button type = "button" v-if="(k.aktivan==false)" v-on:click="odobri(k)">Odobri</button>
-            </div>
-        </div> 
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-5" style="margin-left: 50px" >
+            <div v-for="k in komentar" style="heigth:200px">
+                <div class="komentar" style="width:250px">
+                    <p id="komentar">
+                        Komentar: {{k.tekst}}</br>
+                        Kupac:{{k.kupac.ime}}<br>
+                        Manifestacija:{{k.manifestacija.naziv}}
+                    </p> 
+                    <button class="btn btn-sm btn-outline-primary" type = "button" v-if="(k.aktivan==false)" v-on:click="odobri(k)">Odobri</button>
+                </div>
+            </div> 
+        </div>
     </div>
     `,
     mounted(){

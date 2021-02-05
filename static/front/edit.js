@@ -27,7 +27,7 @@ Vue.component("edit",{
             <input type="text" v-model="korisnik.datum"required/>
         </div>
         <div>
-            <button type = "submit">Save</button>
+            <button type = "submit" class="btn btn-sm btn-outline-primary">Save</button>
         </div>
     </form>
     `,

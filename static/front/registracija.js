@@ -37,7 +37,7 @@ Vue.component("registracija",{
                 <input type="text" v-model="datum" required/>
             </div>
             <div>
-                <button type = "submit">Registruj</button>
+                <button type = "submit" class="btn btn-sm btn-outline-primary">Registruj</button>
             </div>
         </form>
     `,
