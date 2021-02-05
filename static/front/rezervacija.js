@@ -52,7 +52,7 @@ Vue.component("rezervacija",{
                 this.$router.push('/home-page')
             })
             .catch(error=>{
-                alert("Ne mozete naruciti vise od 4 karte")
+                alert("Ne mozete naruciti vise od 4 karte ili je manifestacija prosla")
                 window.location.reload()
 
             })

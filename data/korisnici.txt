@@ -1,4 +1,4 @@
-marko5,45,Marko,Markovic,MUSKI,10.12.1998,Kupac,238072,Zlatni,5,3000
+marko5,45,Marko,Markovic,MUSKI,10.12.1998,Kupac,238338,Zlatni,5,3000
 mv,5,Marko,Vukotic,MUSKI,21.11.1999,Administrator
 il,3,Ivan,Luburic,MUSKI,20.12.1999,Administrator
 worker1,pass,Rade,Radnik,MUSKI,10.10.1980,Prodavac

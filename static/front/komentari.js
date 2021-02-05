@@ -12,7 +12,7 @@ Vue.component("komentari",{
                     Komentar: {{k.tekst}}
                     Kupac:{{k.kupac.ime}}
                 </p> 
-                <button type = "button" v-if="(k.status===false)" v-on:click="odobri(k)">Odobri</button>
+                <button type = "button" v-if="(k.aktivan==false)" v-on:click="odobri(k)">Odobri</button>
             </div>
         </div> 
     </div>

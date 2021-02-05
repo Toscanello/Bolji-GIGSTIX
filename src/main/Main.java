@@ -19,6 +19,10 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 
 import DAO.KartaDAO;
 import DAO.KomentarDAO;
@@ -39,10 +43,20 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		port(9090);
+
+		/*JsonSerializer<LocalDateTime> jsonDateSerializer = (localDateTime, typeOfT, context) -> localDateTime == null
+				? null
+				: new JsonPrimitive(localDateTime.toString());
+
+		Gson g = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, jsonDateSerializer).create();*/
 		Gson g = new Gson();
+
 		ManifestacijeDAO.loadManifestacije();
 		KorisnikDAO.loadKorisnike();
 		KomentarDAO.loadKomentare();
+		
+		
+		
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
 		after((req, res) -> res.type("application/json"));
 		get("/test", (req, res) -> {
@@ -366,7 +380,7 @@ public class Main {
 			Double kartaReg = Double.parseDouble(mapa.get("kartaReg").toString());
 			Double kartaVip = Double.parseDouble(mapa.get("kartaVip").toString());
 			Double kartaFun = Double.parseDouble(mapa.get("kartaFun").toString());
-			if ((kartaReg + kartaVip + kartaFun) > 4.0) {
+			if ((kartaReg + kartaVip + kartaFun) > 4.0 ||m.getDatum().isBefore(LocalDateTime.now())) {
 				res.status(400);
 				return "Error";
 			}
@@ -427,11 +441,14 @@ public class Main {
 		});
 
 		post("/komentarisi", (req, res) -> {
-			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
-			Kupac kup = (Kupac) KorisnikDAO.getKorisnikByUsername(mapa.get("korisnik"));
-			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(mapa.get("manifestacija"));
-
-			Komentar k = new Komentar(kup, m, mapa.get("komentar"), Integer.parseInt(mapa.get("ocena")));
+			KomentarRequest kr =g.fromJson(req.body(), KomentarRequest.class);
+			Kupac kup = (Kupac) KorisnikDAO.getKorisnikByUsername(kr.getKorisnik());
+			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(kr.getManifestacija());
+			if(m.getDatum().isAfter(LocalDateTime.now())||!KartaDAO.proveri(kup,m)) {
+				res.status(400);
+				return "Bad";
+			}
+			Komentar k = new Komentar(kup, m, kr.getKomentar(), kr.getOcena());
 			m.dodajKomentar(k);
 			KomentarDAO.dodajKomentar(k);
 			Input o = new Input("data/komentari.txt");

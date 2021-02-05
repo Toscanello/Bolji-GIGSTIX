@@ -46,7 +46,11 @@ Vue.component("prikazmanifestacije",{
                 manifestacija:this.m.naziv,
                 korisnik:this.korisnik.username
             })
-            .then(window.location.reload())
+            .then(this.$router.push('/home-page'))
+            .catch(error=>{
+                alert("Ne mozete komentarisati ovu manifestaciju jer jos nije prosla ili niste kupili kartu za nju")
+                this.$router.push('/home-page')
+            })
         }
     }
 })
