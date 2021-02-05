@@ -43,6 +43,11 @@ Vue.component("registracija",{
     `,
     methods:{
         submitForm:function(){
+            const korisnik = JSON.parse(localStorage.getItem('korisnik'))
+            var ul= "Kupac"
+            if(korisnik!=null){
+                ul="Prodavac"
+            }
             const user = {
                 username:this.username,
                 password:this.password,
@@ -50,15 +55,12 @@ Vue.component("registracija",{
                 prezime: this.prezime,
                 pol:this.pol,
                 datum:this.datum,
-                uloga:"Kupac"
+                uloga:ul
             }
             axios
             .post('/registruj',user)
             .then(response=>{
-                const kor = response.data
-                console.log(kor)
-                localStorage.setItem('korisnik', JSON.stringify(kor))
-                this.$router.push('/login')
+                this.$router.push('/home-page')
             })
         }
     }

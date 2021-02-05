@@ -52,7 +52,7 @@ Vue.component("header-comp",{
                     <div v-if="(korisnik!==null)">
                         <div v-if="(korisnik.uloga==='Administrator')">
                             <li class="nav-item">
-                                <a class="nav-link" href="/#/registrujProdavca">Registruj prodavca</a>
+                                <a class="nav-link" href="/#/registruj">Registruj prodavca</a>
                             </li>
                         </div>
                     </div>

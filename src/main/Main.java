@@ -44,19 +44,20 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		port(9090);
 
-		/*JsonSerializer<LocalDateTime> jsonDateSerializer = (localDateTime, typeOfT, context) -> localDateTime == null
-				? null
-				: new JsonPrimitive(localDateTime.toString());
-
-		Gson g = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, jsonDateSerializer).create();*/
+		/*
+		 * JsonSerializer<LocalDateTime> jsonDateSerializer = (localDateTime, typeOfT,
+		 * context) -> localDateTime == null ? null : new
+		 * JsonPrimitive(localDateTime.toString());
+		 * 
+		 * Gson g = new GsonBuilder().registerTypeAdapter(LocalDateTime.class,
+		 * jsonDateSerializer).create();
+		 */
 		Gson g = new Gson();
 
 		ManifestacijeDAO.loadManifestacije();
 		KorisnikDAO.loadKorisnike();
 		KomentarDAO.loadKomentare();
-		
-		
-		
+
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
 		after((req, res) -> res.type("application/json"));
 		get("/test", (req, res) -> {
@@ -100,18 +101,26 @@ public class Main {
 				return "Error.";
 			}
 
-			Kupac k = new Kupac(mapa.get("username"), mapa.get("password"), mapa.get("ime"), mapa.get("prezime"),
-					mapa.get("pol"), mapa.get("datum"), mapa.get("uloga"), 0, new TipKupca("Nema Rank", 0, 0));
-			// Korisnik k = g.fromJson(req.body(), Korisnik.class);
 			ArrayList<Korisnik> listaKorisnika = KorisnikDAO.getListaKorisnika();
-			listaKorisnika.add(k);
+			Kupac k = null;
+			Prodavac p = null;
+			if (mapa.get("uloga").equals("Kupac")) {
+				k = new Kupac(mapa.get("username"), mapa.get("password"), mapa.get("ime"), mapa.get("prezime"),
+						mapa.get("pol"), mapa.get("datum"), mapa.get("uloga"), 0, new TipKupca("Nema Rank", 0, 0));
+				listaKorisnika.add(k);
+			}
+			else {
+				p = new Prodavac(mapa.get("username"), mapa.get("password"), mapa.get("ime"), mapa.get("prezime"),
+						mapa.get("pol"), mapa.get("datum"), mapa.get("uloga"));
+				listaKorisnika.add(p);
+			}
 
 			Input o = new Input("data/korisnici.txt");
 			o.snimiKorisnike(listaKorisnika);
 
 			res.status(200);
 
-			return g.toJson(k);
+			return "OK";
 
 		});
 		post("/regManifestacije", (req, res) -> {
@@ -321,7 +330,7 @@ public class Main {
 			res.type("application/json");
 			return g.toJson(manif);
 		});
-		
+
 		get("/korisnici/getAll", (req, res) -> {
 			res.type("application/json");
 			return g.toJson(KorisnikDAO.listaKorisnika);
@@ -380,7 +389,7 @@ public class Main {
 			Double kartaReg = Double.parseDouble(mapa.get("kartaReg").toString());
 			Double kartaVip = Double.parseDouble(mapa.get("kartaVip").toString());
 			Double kartaFun = Double.parseDouble(mapa.get("kartaFun").toString());
-			if ((kartaReg + kartaVip + kartaFun) > 4.0 ||m.getDatum().isBefore(LocalDateTime.now())) {
+			if ((kartaReg + kartaVip + kartaFun) > 4.0 || m.getDatum().isBefore(LocalDateTime.now())) {
 				res.status(400);
 				return "Error";
 			}
@@ -441,10 +450,10 @@ public class Main {
 		});
 
 		post("/komentarisi", (req, res) -> {
-			KomentarRequest kr =g.fromJson(req.body(), KomentarRequest.class);
+			KomentarRequest kr = g.fromJson(req.body(), KomentarRequest.class);
 			Kupac kup = (Kupac) KorisnikDAO.getKorisnikByUsername(kr.getKorisnik());
 			Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(kr.getManifestacija());
-			if(m.getDatum().isAfter(LocalDateTime.now())||!KartaDAO.proveri(kup,m)) {
+			if (m.getDatum().isAfter(LocalDateTime.now()) || !KartaDAO.proveri(kup, m)) {
 				res.status(400);
 				return "Bad";
 			}
@@ -461,19 +470,19 @@ public class Main {
 			String naziv = req.params(":id");
 			ArrayList<Komentar> komentari = new ArrayList<Komentar>();
 			for (Komentar kom : KomentarDAO.listaKomentara) {
-				if(kom.getManifestacija().getNaziv().equals(naziv))
+				if (kom.getManifestacija().getNaziv().equals(naziv))
 					komentari.add(kom);
 			}
 			res.type("application/json");
 			return g.toJson(komentari);
 		});
-		
+
 		get("/komentari", (req, res) -> {
 			res.type("application/json");
 			System.out.println(KomentarDAO.listaKomentara.size());
 			return g.toJson(KomentarDAO.listaKomentara);
 		});
-		
+
 		post("/odobri/:id", (req, res) -> {
 			String naziv = req.params(":id");
 			Komentar k = KomentarDAO.getKomentarById(naziv);
