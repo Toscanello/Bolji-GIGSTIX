@@ -3,7 +3,8 @@ Vue.component("prikazmanifestacije",{
         return{
           m:"",
           korisnik:"",
-          komentari:null
+          komentari:null,
+          total:0
         }
     },
 
@@ -20,6 +21,10 @@ Vue.component("prikazmanifestacije",{
             <div>
             <komentarisanje @clicked="onCommentClick"> </komentarisanje>
             </div>
+            <div>
+                <h4>Prosek:</h4>
+                {{total}}
+            </div>
             <div v-for="k in komentari">
                 <div v-if="k.aktivan===true">
                     <p>{{k.tekst}}</br></p>
@@ -34,7 +39,16 @@ Vue.component("prikazmanifestacije",{
         .get(`komentari/${this.m.naziv}`)
         .then(response=>{
             console.log(response.data)
-            this.komentari=response.data})
+            this.komentari=response.data
+            var counter = 0
+            this.komentari.forEach(element => {
+                if(element.aktivan==true){
+                    this.total =  this.total+element.ocena;
+                    counter=counter+1
+                }
+            });
+            this.total = this.total/counter;
+        })
     },
     methods:{
         onCommentClick: function(kom){
