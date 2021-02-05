@@ -1,0 +1,4 @@
+2,manif,2021-02-04T15:45,123123.0,marko5,rezervisana,regular
+2,manif,2021-02-04T15:45,123123.0,marko5,rezervisana,regular
+2,manif,2021-02-04T15:45,123123.0,marko5,rezervisana,vip
+4,Zurka Studenata,2021-05-10T21:45,750.0,marko5,rezervisana,regular

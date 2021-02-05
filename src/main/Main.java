@@ -57,6 +57,7 @@ public class Main {
 		ManifestacijeDAO.loadManifestacije();
 		KorisnikDAO.loadKorisnike();
 		KomentarDAO.loadKomentare();
+		KartaDAO.loadKarte();
 
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
 		after((req, res) -> res.type("application/json"));
@@ -136,13 +137,24 @@ public class Main {
 				return "Bad Location";
 			}
 			Manifestacija m;
+			String naziv = mapa.get("naziv");
+			ArrayList<Manifestacija> listaManifestacija = ManifestacijeDAO.getListaManifestacija();
+			int flag = 0;
+			for (Manifestacija manif : listaManifestacija) {
+				if(naziv.equals(manif.getNaziv())) flag++;
+			}
 			try {
-				m = new Manifestacija(mapa.get("naziv"), mapa.get("tip"), Integer.parseInt(mapa.get("brojMesta")),
-						LocalDateTime.parse(mapa.get("datum"), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
-						Double.parseDouble(mapa.get("cena")), mapa.get("status"), lo, "zdravko");// slika
+				if(flag==0) {
+					m = new Manifestacija(naziv, mapa.get("tip"), Integer.parseInt(mapa.get("brojMesta")),
+							LocalDateTime.parse(mapa.get("datum"), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
+							Double.parseDouble(mapa.get("cena")), mapa.get("status"), lo, "zdravko");// slika
+				}else {
+					res.status(400);
+					return "Error";
+				}
 			} catch (Exception e) {
 				res.status(400);
-				return "Bad Br. Mesta, Datum or Cena";
+				return "Error";
 			}
 
 			ManifestacijeDAO.dodajManifestaciju(m);
@@ -161,7 +173,37 @@ public class Main {
 			o.snimiManifestacije(ManifestacijeDAO.getListaManifestacija());
 			return "OK";
 		});
-
+		
+		post("/filterKarte", (req, res) -> {
+			HashMap<String, Boolean> mapa = g.fromJson(req.body(), HashMap.class);
+			
+			boolean regular = mapa.get("reg");
+			boolean vip = mapa.get("vip");
+			boolean fanPit = mapa.get("fpit");
+			
+			ArrayList<Karta> listaKarata = KartaDAO.getListaKarata();
+			ArrayList<Karta> karte = new ArrayList<Karta>();
+			
+			if(regular) {
+				for (Karta kar : listaKarata) {
+					if(kar.getTip().equals("regular")) karte.add(kar);
+				}
+			}if(fanPit){
+				for (Karta kar : listaKarata) {
+					if(kar.getTip().equals("fan-pit")) karte.add(kar);
+				}
+			}if(vip) {
+				for (Karta kar : listaKarata) {
+					if(kar.getTip().equals("vip")) karte.add(kar);
+				}
+			}
+			if(!regular&&!fanPit&&!vip) {
+				return g.toJson(listaKarata);
+			}
+			res.type("application/json");
+			return g.toJson(karte);
+		});
+		
 		post("/pretragaKarte", (req, res) -> {
 			HashMap<String, String> mapa = g.fromJson(req.body(), HashMap.class);
 
@@ -408,7 +450,7 @@ public class Main {
 			}
 			for (int i = 0; i < kartaFun; i++) {
 				Karta karta = new Karta(KartaDAO.kreiranjeId(), m, m.getDatum(), 4 * m.getCena(), k, "rezervisana",
-						"fun");
+						"fan-pit");
 				brojBodova += (int) (karta.getCena() / 1000 * 133);
 				KartaDAO.dodajKartu(karta);
 			}
@@ -431,7 +473,8 @@ public class Main {
 			o.snimiManifestacije(ManifestacijeDAO.getListaManifestacija());
 			o = new Input("data/korisnici.txt");
 			o.snimiKorisnike(KorisnikDAO.listaKorisnika);
-
+			o = new Input("data/karte.txt");
+			o.snimiKarte(KartaDAO.listaKarata);
 			return g.toJson(cena);
 		});
 
@@ -441,7 +484,12 @@ public class Main {
 			k.setIme(mapa.get("ime"));
 			k.setPassword(mapa.get("password"));
 			k.setPrezime(mapa.get("prezime"));
-			k.setPol(mapa.get("pol"));
+			String pol = mapa.get("pol");
+			if(!pol.equals("MUSKI") && !pol.equals("ZENSKI")) {
+				res.status(400);
+				return "Los pol";
+			}
+			k.setPol(pol);
 			k.setDatum(mapa.get("datum"));
 
 			Input o = new Input("data/korisnici.txt");

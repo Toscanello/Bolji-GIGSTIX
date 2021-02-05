@@ -1,8 +1,11 @@
 package DAO;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import io.Output;
 import model.Karta;
 import model.Kupac;
 import model.Manifestacija;
@@ -47,4 +50,24 @@ public class KartaDAO {
 
 		return false;
 	}
+
+	public static ArrayList<Karta> getListaKarata() {
+		return listaKarata;
+	}
+
+	public static void setListaKarata(ArrayList<Karta> listaKarata) {
+		KartaDAO.listaKarata = listaKarata;
+	}
+
+	public static boolean loadKarte() throws UnsupportedEncodingException, FileNotFoundException {
+		
+		@SuppressWarnings("resource")
+		Output o = new Output("data/karte.txt");
+		o.ucitajKarte(listaKarata);
+		if (listaKarata.isEmpty())
+			return false;
+		return true;
+		
+	}
+	
 }

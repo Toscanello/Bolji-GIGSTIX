@@ -7,3 +7,4 @@ marko5,manif,koment,3,false
 marko5,manif,koment,3,false
 marko5,manif,komentar,3,false
 marko5,koncert Zdravka Colica,hahaha,1,false
+marko5,manif,najjace,5,true

@@ -60,7 +60,11 @@ Vue.component("karte",{
             })
         },
         onFilter: function(z){
-            console.log(z)
+            axios
+            .post('/filterKarte',z)
+            .then(response=>{
+                this.karte = response.data
+            })
         }
         
     }

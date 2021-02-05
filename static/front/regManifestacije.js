@@ -65,8 +65,8 @@ Vue.component("registracijamanifestacije",{
             .catch(error=>{
                 console.log("Greska.")
                 
-                alert("Neka greska")
-                window.location.reload()
+                alert("Greska pri unosu podataka.")
+                //window.location.reload()
 
             })
            

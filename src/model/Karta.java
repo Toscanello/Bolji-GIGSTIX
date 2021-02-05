@@ -17,7 +17,7 @@ public class Karta {
 	private Double cena;
 	private Kupac kupac;
 	private String status; // rezervisana odustanak
-	private String tip; // vip regular fan pit
+	private String tip; // vip regular fan-pit
 
 	public Karta(String id, Manifestacija manifestacija, LocalDateTime datum, Double cena, Kupac kupac, String status,
 			String tip) {
@@ -95,7 +95,7 @@ public class Karta {
 		ManifestacijeDAO.loadManifestacije();
 		Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(manif);
 		
-		LocalDateTime datum = LocalDateTime.parse(tokeni[3]);
+		LocalDateTime datum = LocalDateTime.parse(tokeni[2]);
 		
 		Double cena = Double.valueOf(tokeni[3]);
 		//String username

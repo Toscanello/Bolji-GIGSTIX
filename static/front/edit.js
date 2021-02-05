@@ -43,6 +43,12 @@ Vue.component("edit",{
                 this.$router.push('/home-page')
                 window.location.reload()
             })
+            .catch(error=>{
+                console.log("Greska.")	
+                alert("Lose unet pol. Mora biti MUSKI ili ZENSKI!")
+                window.location.reload()
+
+            })
         }
     }
 })

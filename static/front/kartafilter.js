@@ -3,11 +3,10 @@ Vue.component("karta-filter",{
         return{
           pretraga:{
             
-            rast:"",
-            opad:"",
-            dat_rast:"",
-            dat_opad:""
-
+            reg:false,
+            vip:false,
+            fpit:false
+            
           }
         }
     },
@@ -15,20 +14,15 @@ Vue.component("karta-filter",{
     template:`
         <div>
         
-            <input type="checkbox" v-model="reg()">Regular</input>
-            <input type="checkbox" v-model="vip()">VIP</input>
-            <input type="checkbox" v-model="fpit()">Fan Pit</input>
+            <input type="checkbox" v-model="pretraga.reg">Regular</input>
+            <input type="checkbox" v-model="pretraga.vip">VIP</input>
+            <input type="checkbox" v-model="pretraga.fpit">Fan Pit</input>
+            <button type="button" v-on:click="filter()">Filter</button>
             
         </div>
     `,
     methods: {
-        reg: function(){
-            this.$emit('clicked', this.pretraga)
-        },
-        vip: function(){
-            this.$emit('clicked', this.pretraga)
-        },
-        fpit: function(){
+        filter: function(){
             this.$emit('clicked', this.pretraga)
         }
     }
