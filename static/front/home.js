@@ -15,7 +15,7 @@ Vue.component("home-page",{
             <div v-for = "m in manifestacije" v-if="((korisnik===null && m.status==='aktivan')||(uloga==='Administrator')||(uloga!=='Administrator' && m.status==='aktivan'))">
                 <div class="row">
                     <div class="card shadow-sm" id="manifest" style="width: 400px">
-                        <img :src="'../images/'+m.slika+'.jpg'" width = "200px" heigth = "300">
+                        <img :src="'../images-manifestations/'+m.slika" width = "200px" heigth = "300">
                         <div class="card-body">
                             <p id="man"class="card-text">{{m.naziv}} se odrzava 
                             {{m.datum.date.day}}.{{m.datum.date.month}}.{{m.datum.date.year}}
