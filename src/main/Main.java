@@ -7,7 +7,10 @@ import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -18,11 +21,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.http.Part;
+
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializer;
 
 import DAO.KartaDAO;
 import DAO.KomentarDAO;
@@ -38,6 +40,7 @@ import model.Lokacija;
 import model.Manifestacija;
 import model.Prodavac;
 import model.TipKupca;
+import spark.utils.IOUtils;
 
 public class Main {
 
@@ -147,7 +150,7 @@ public class Main {
 				if(flag==0) {
 					m = new Manifestacija(naziv, mapa.get("tip"), Integer.parseInt(mapa.get("brojMesta")),
 							LocalDateTime.parse(mapa.get("datum"), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")),
-							Double.parseDouble(mapa.get("cena")), mapa.get("status"), lo, "zdravko");// slika
+							Double.parseDouble(mapa.get("cena")), mapa.get("status"), lo, mapa.get("putanjaDoSlike"));
 				}else {
 					res.status(400);
 					return "Error";
@@ -539,6 +542,21 @@ public class Main {
 			o.snimiKomentare(KomentarDAO.listaKomentara);
 			return "OK";
 		});
+		
+		post("/upload", (req, res) -> {
+            req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(new File("./static" + "/images-manifestations").getCanonicalPath()));
+            Part filePart = req.raw().getPart("file");
+
+            try (InputStream inputStream = filePart.getInputStream()) {
+                OutputStream outputStream = new FileOutputStream(new File("./static" + "/images-manifestations").getCanonicalPath() + "/" + filePart.getSubmittedFileName());
+                IOUtils.copy(inputStream, outputStream);
+                outputStream.close();
+            } catch (Exception e) {
+            	e.printStackTrace();
+            }
+
+            return "File uploaded and saved.";
+        });
 
 	}
 }

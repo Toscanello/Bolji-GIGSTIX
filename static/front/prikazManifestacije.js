@@ -10,7 +10,7 @@ Vue.component("prikazmanifestacije",{
 
     template:`
         <div>
-            <img :src="'../images/'+m.slika+'.jpg'" width = "300px" heigth = "300">
+            <img :src="'../images-manifestations/'+m.slika" width = "300px" heigth = "300">
             <div class="card-body">
                 <p class="card-text">Naziv: {{m.naziv}}<br/>Datum: {{m.datum.date.day}}.{{m.datum.date.month}}.{{m.datum.date.year}}
                 u {{m.datum.time.hour}}:{{m.datum.time.minute}}<br/>

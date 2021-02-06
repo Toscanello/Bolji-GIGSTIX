@@ -8,7 +8,8 @@ Vue.component("registracijamanifestacije",{
             cena:"",
             status:"",
             lokacija:"",
-            korisnik:""
+            korisnik:"",
+            file: ""
         }
     },
 
@@ -38,6 +39,9 @@ Vue.component("registracijamanifestacije",{
                 <label for="lokacija"><b>Lokacija</b></label>
                 <input type="text" v-model="lokacija" placeholder = "Example(44.58,41.25,ulica,broj,grad,postBroj)" required/>
             </div>
+            <label>File
+                <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" />
+            </label>
             <div>
                 <button type = "submit" class="btn btn-sm btn-outline-primary">Dodaj</button>
             </div>
@@ -55,8 +59,12 @@ Vue.component("registracijamanifestacije",{
                     cena: this.cena,
                     status: "neaktivan",
                     lokacija: this.lokacija,
-                    korisnik: this.korisnik.username
+                    korisnik: this.korisnik.username,
+                    putanjaDoSlike: this.file.name
             }
+
+            this.submitFile();
+
             axios
             .post('/regManifestacije', manif)
             .then(response=>{
@@ -70,6 +78,28 @@ Vue.component("registracijamanifestacije",{
 
             })
            
-        }
+        },
+        submitFile() {
+            let formData = new FormData();
+            formData.append("file", this.file);
+            console.log(">> formData >> ", formData);
+      
+            axios
+              .post("/upload", formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              })
+              .then(function () {
+                console.log("SUCCESS!!");
+              })
+              .catch(function () {
+                console.log("FAILURE!!");
+              });
+          },
+          handleFileUpload() {
+            this.file = this.$refs.file.files[0];
+            console.log(">>>> 1st element in files array >>>> ", this.file);
+          },
     }
 })

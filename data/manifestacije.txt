@@ -1,7 +1,9 @@
-manif,koncert,46501,2021-02-04T15:45,123123.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
-Zurka Studenata2,4321431,532532,2021-10-10T12:01,4321431.0,neaktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
-Zurka Studenata,zurka,998,2021-05-10T21:45,750.0,aktivan,44.58,41.25,4.juli,27,Novi Sad,21000,zdravko
-532532,532532,532532,2020-10-10T10:30,4531251.0,neaktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
-koncert Zdravka Colica,koncert,216,2009-12-03T10:15:30,2000.0,aktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko
-asd,asd,1234,1212-12-12T12:12,12342.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
-toska,koncert,121,1200-12-12T11:11,123.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko
+ime,tip,123,2021-12-12T16:15,12.0,aktivan,44.58,44.58,ulica,12,grad,12000,download.jpg
+Zurka Studenata2,4321431,532532,2021-10-10T12:01,4321431.0,neaktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko.jpg
+Zurka Studenata,zurka,998,2021-05-10T21:45,750.0,aktivan,44.58,41.25,4.juli,27,Novi Sad,21000,zdravko.jpg
+pema,koncert,1230,2021-02-12T15:45,3000.0,aktivan,44.58,41.25,Strazilovska,14,Novi Sad,21000,pema.png
+manif,koncert,46501,2021-02-04T15:45,123123.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko.jpg
+532532,532532,532532,2020-10-10T10:30,4531251.0,neaktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko.jpg
+koncert Zdravka Colica,koncert,216,2009-12-03T10:15:30,2000.0,aktivan,10.0,10.0,4. juli,27,Zrenjanin,23000,zdravko.jpg
+asd,asd,1234,1212-12-12T12:12,12342.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko.jpg
+toska,koncert,121,1200-12-12T11:11,123.0,aktivan,44.58,41.25,4.juli,27,Zrenjanin,23000,zdravko.jpg

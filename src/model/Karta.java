@@ -91,8 +91,6 @@ public class Karta {
 		String tokeni[] = line.split(",");
 		String id = tokeni[0];
 		String manif = tokeni[1];
-		
-		ManifestacijeDAO.loadManifestacije();
 		Manifestacija m = ManifestacijeDAO.getManifestacijaByNaziv(manif);
 		
 		LocalDateTime datum = LocalDateTime.parse(tokeni[2]);
